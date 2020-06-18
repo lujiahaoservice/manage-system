@@ -1,0 +1,1 @@
+export const LOGIN_INFO = 'LOGIN_INFO' //登录成功的对象

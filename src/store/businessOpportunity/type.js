@@ -1,0 +1,3 @@
+export const BUSINESS_DATA = 'BUSINESS_DATA'
+export const PRODUCT_DATA = 'PRODUCT_DATA'
+export const DIALOGVIS_JSON = 'DIALOGVIS_JSON'
