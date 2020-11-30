@@ -1,0 +1,1148 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link href="__PUBLIC__/css/admin/reset.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="__PUBLIC__/css/admin/element-ui.css" />
+  <script src="__PUBLIC__/js/vue.min.js"></script>
+  <script src="__PUBLIC__/js/admin/element-ui.js"></script>
+  <script src="__PUBLIC__/js/admin/axios.min.js"></script>
+  <script src="__PUBLIC__/js/admin/qs.js"></script>
+  <script src="/Public/js/jquery-1.12.4.min.js"></script>
+  <style>
+    body {
+      overflow: hidden;
+      padding-bottom: 100px;
+      padding-right: 0 !important;
+      font-family: "Helvetica Neue", Helvetica, "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    }
+
+    .c_red {
+      color: red;
+      padding: 0 2px;
+    }
+
+    .p_10 {
+      padding: 10px;
+    }
+
+    .p_20 {
+      padding: 20px;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    .el-header {
+      height: auto !important;
+      background: #09f;
+      text-indent: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 5px;
+      color: white;
+    }
+
+    .filter-box {
+      border-radius: 5px;
+      margin: 20px auto;
+    }
+
+    .filter-box .el-form--inline .el-form-item {
+      margin-right: 25px;
+    }
+
+    .imgselectedparent:hover .imgselected {
+      display: block !important;
+    }
+
+    /*弹窗*/
+
+    .el-dialog__header {
+      background: #2e6fd5;
+      padding: 10px 20px;
+    }
+
+    .el-dialog__title {
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .el-dialog__headerbtn .el-dialog__close,
+    .el-dialog__headerbtn:focus .el-dialog__close,
+    .el-dialog__headerbtn:hover .el-dialog__close {
+      color: #ffffff;
+    }
+
+    .el-dialog__headerbtn {
+      top: 15px;
+    }
+
+    .el-dialog__body {
+      /* max-height: 400px; */
+      overflow: auto;
+    }
+
+    .el-dialog__body::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .el-dialog__body::-webkit-scrollbar-thumb {
+      background-color: #ddd;
+      border-radius: 3px;
+    }
+
+    .el-table td,
+    .el-table th {
+      text-align: center !important;
+      font-size: 13px;
+    }
+
+    .el-table td {
+      padding: 3px 0;
+    }
+
+    /* .el-table__header-wrapper .el-checkbox {
+            display: none
+        } */
+
+    .p-title {
+      font-size: 13px;
+      font-weight: bold;
+      position: relative;
+      padding: 10px;
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    .el-table th,
+    .el-table tr {
+      font-weight: normal;
+    }
+
+    .p-title::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 49%;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+      width: 5px;
+      height: 16px;
+      background: #409eff;
+      border-radius: 3px;
+    }
+
+    .hideUpload>.el-upload--picture-card {
+      display: none;
+    }
+
+    .upload-box p {
+      margin: 10px 0;
+    }
+
+    .el-select-dropdown__list {
+      max-width: 250px;
+    }
+
+    .el-col-12 .el-input {
+      width: 200px;
+    }
+
+    .el-table .cell a {
+      color: #409eff;
+    }
+
+    .el-upload--picture-card,
+    .el-upload-list--picture-card .el-upload-list__item {
+      width: 90px;
+      height: 90px;
+    }
+
+    .el-upload--picture-card i {
+      line-height: 3;
+    }
+
+    .table-fixed .el-table__fixed-right {
+      height: 100% !important;
+    }
+
+    .table-fixed .el-table__fixed {
+      height: 100% !important;
+    }
+
+    .el-tooltip__popper {
+      max-width: 300px;
+      line-height: 1.5;
+    }
+
+    .pic-box {
+      display: inline-block;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .el-badge__content.is-fixed {
+      z-index: 10;
+    }
+
+    .el-radio-button:first-child .el-radio-button__inner {
+      border-radius: 0;
+    }
+
+    .content-menu {
+      margin-top: 20px;
+      padding-left: 10px;
+    }
+
+    .content-menu li {
+      float: left;
+      margin: 0 20px 10px 20px;
+    }
+
+    .content-menu li a {
+      font-size: 15px;
+      display: block;
+      color: #818181;
+    }
+
+    .el-input el-input--suffix {
+      font-size: 20px;
+      color: #ffffff;
+    }
+
+    .block .el-input__inner {
+      margin-left: 20px;
+      /* background-color: #0099ff; */
+      font-size: 18px;
+    }
+
+    .el-date-editor .el-input .el-input--prefix .el-input--suffix .el-date-editor--month {
+      width: 180px;
+      height: 30px;
+    }
+
+    .dataList .el-input__inner {
+      width: 200px;
+      height: 35px;
+    }
+
+    .dataList {
+      display: flex;
+    }
+
+    .flexbox {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .el-dialog__footer {
+      box-sizing: content-box;
+    }
+
+    /* .el-dialog {
+      height: 350px;
+    } */
+
+    .el-table__header-wrapper th {
+      border-right-width: 1;
+    }
+
+    .el-table--border td,
+    .el-table--border th,
+    .el-table__body-wrapper .el-table--border.is-scrolling-left~.el-table__fixed {
+      border-right-width: 1;
+    }
+
+    .el-container.is-vertical {
+      margin-left: 24px;
+      margin-top: 24px;
+      background-color: #ffffff;
+    }
+
+    .el-container.is-vertical .el-header {
+      background-color: #2d69d2;
+    }
+
+    .p_20 {
+      padding: 0;
+    }
+
+    /* .el-dialog:last-child .el-input__inner{
+      border: none;
+
+    } */
+  </style>
+</head>
+
+<body width="100%" class="ac_manage">
+  <div id="app" v-cloak>
+    <el-container>
+      <!-- 头部部分 -->
+      <el-header ref="header">
+        <div class="dataList">
+          <div class="block">标准薪资</div>
+        </div>
+      </el-header>
+
+      <!-- 主体部分 START -->
+
+      <hr />
+      <el-main :style="'height:'+(fullHeight-50)+'px;'" style="padding: 0">
+        <el-scrollbar style="height: 100%">
+          <el-row class="p_20">
+            <el-row class="filter-box">
+              <el-form :inline="true" :model="searchForm" size="mini" v-if='showsearch'>
+                <el-form-item label="姓名: " style="padding-left: 20px">
+                  <el-input v-model="searchForm.name" placeholder="请输入员工姓名"></el-input>
+                </el-form-item>
+                <el-form-item label="身份证号：">
+                  <el-input v-model="searchForm.id_card" placeholder="请输入身份证号" type='number'
+                    oninput="value=value.replace(/[^0-9.]/g, '' )"></el-input>
+                </el-form-item>
+
+                <el-form-item label="部门：">
+                  <el-select v-model="searchForm.level_0" filterable placeholder="请选择部门">
+                    <el-option v-for="item in department" :key="item.id" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item style="float: right">
+                  <a class="btn btn-success" href="batch_update_basic_salary.html">
+                    <el-button>批量导入</el-button>
+                  </a>
+                  <!-- <a
+                      class="btn btn-success"
+                      href="__MODULE__/PriceAudit/batch_base_price_file"
+                      ><el-button>批量导入</el-button></a
+                    > -->
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="onSearch">查询</el-button>
+                  <el-button @click="onReset">重置</el-button>
+                  <el-button @click="daochu">导出</el-button>
+                  <el-button @click="showmoredetail">展开搜索条件</el-button>
+                  <el-button @click="showmoresearch" v-if='showmore'>隐藏更多部门</el-button>
+                  <el-button @click="showmoresearch" v-else>展示更多部门</el-button>
+                </el-form-item>
+              </el-form>
+              <el-form :inline="true" :model="searchForm" size="mini" v-else>
+                <el-form-item label="姓名: " style="padding-left: 20px">
+                  <el-input v-model="searchForm.name" placeholder="请输入员工姓名"></el-input>
+                </el-form-item>
+                <el-form-item label="身份证号：">
+                  <el-input v-model="searchForm.id_card" placeholder="请输入身份证号" type='number'
+                    oninput="value=value.replace(/[^0-9.]/g, '' )"></el-input>
+                </el-form-item>
+                <el-form-item label="岗位：">
+                  <el-select v-model="searchForm.position" filterable placeholder="请选择岗位">
+                    <el-option v-for="item in positionList" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="部门：">
+                  <el-select v-model="searchForm.level_0" filterable placeholder="请选择部门">
+                    <el-option v-for="item in department" :key="item.id" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="状态：">
+                  <el-select v-model="searchForm.status" placeholder="请选择" @change="ztgaibian">
+                    <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item style="float: right">
+                  <a class="btn btn-success" href="batch_update_basic_salary.html">
+                    <el-button>批量导入</el-button>
+                  </a>
+                  <!-- <a
+                      class="btn btn-success"
+                      href="__MODULE__/PriceAudit/batch_base_price_file"
+                      ><el-button>批量导入</el-button></a
+                    > -->
+                </el-form-item>
+                <el-form-item label="入职时间:" style="padding-left: 20px">
+                  <el-date-picker v-model="searchForm.entry_time_start" type="date" value-format="timestamp"
+                    style="width: 180px" placeholder="选择开始时间" format="yyyy-MM-dd" @change="confirmStartTime">
+                  </el-date-picker>
+                  ~
+                  <el-date-picker v-model="searchForm.entry_time_end" type="date" value-format="timestamp"
+                    style="width: 180px" placeholder="选择结束时间" format="yyyy-MM-dd" @change="confirmEndTime">
+                  </el-date-picker>
+                </el-form-item>
+                <el-form-item label="离职时间:">
+                  <el-date-picker v-model="searchForm.leave_time_start" type="date" value-format="timestamp"
+                    style="width: 180px" placeholder="选择开始时间" format="yyyy-MM-dd" @change="confirmStartTime">
+                  </el-date-picker>
+                  ~
+                  <el-date-picker v-model="searchForm.leave_time_end" type="date" value-format="timestamp"
+                    style="width: 180px" placeholder="选择结束时间" format="yyyy-MM-dd" @change="confirmEndTime">
+                  </el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="onSearch">查询</el-button>
+                  <el-button @click="onReset">重置</el-button>
+                  <el-button @click="daochu">导出</el-button>
+                  <el-button @click="showlesssearch">隐藏搜索条件</el-button>
+                  <el-button @click="showmoresearch" v-if='showmore'>隐藏更多部门</el-button>
+                  <el-button @click="showmoresearch" v-else>展示更多部门</el-button>
+                </el-form-item>
+              </el-form>
+
+            </el-row>
+
+            <el-row>
+              <el-table border ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
+                :header-cell-style="{background:'#c8d5f3',color:'#3f76db'}" highlight-current-row max-height="450"
+                stripe v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(0, 0, 0, 0.8)">
+                <el-table-column label="序号" type="index" width="50" :index='(index)=> index+1+ 20*(searchForm.page-1) '
+                  fixed='left'>
+                </el-table-column>
+                <el-table-column label="姓名" fixed='left'>
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.name || "-" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="工号" width="85">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.staff_no || "-" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="身份证号" width="150" show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.id_card || "-" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="成本中心" show-overflow-tooltip width="100px">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.cost_enter_department || "-" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="一级部门" show-overflow-tooltip width="100px">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.level_0 || "-" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="二级部门">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.level_1 || "" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="三级部门" v-if='showmore'>
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.level_2 || "" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="四级部门" v-if='showmore'>
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.level_3 || "" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="五级部门" v-if='showmore'>
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.level_4 || "" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="职位" width="90">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.position || "-" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="入职日期" width="90">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.entry_time }}</span>
+                  </template>
+                </el-table-column>
+                <!-- <el-table-column label="入职日期" width="120px">
+                  <template slot-scope="scope">
+                    <span>{{ parseInt(scope.row.entry_time)*1000 |
+                        timestampToTime }}</span>
+                  </template>
+                </el-table-column> -->
+                <el-table-column label="离职日期">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.leave_time || "-" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="状态" show-overflow-tooltip width="50">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.status || "-" }}</span>
+                  </template>
+                </el-table-column>
+                <!-- <el-table-column label="是否计薪" show-overflow-tooltip width="80">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.is_calculate || "-" }}</span>
+                  </template>
+                </el-table-column> -->
+                <!-- 要修改 -->
+                <!-- <el-table-column label="异常类型" show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.executor || "-" }}</span>
+                  </template>
+                </el-table-column> -->
+                <!-- 要修改 -->
+                <!-- <el-table-column label="生效日期" show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.executor || "-" }}</span>
+                  </template>
+                </el-table-column> -->
+                <el-table-column label="基本薪资">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.basic_salary || "-" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="绩效薪资">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.merit_salary }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="高温补贴">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.high_temperature_subsidy }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="通讯补贴">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.communication_subsidy }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="其它补贴">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.other_subsidy }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="总薪资">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.all_basic_salary  }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width="200" fixed="right">
+                  <template slot-scope="scope">
+                    <!-- 需修改 -->
+                    <el-button type="text" @click="see(scope.$index, tableData)">编辑</el-button>
+                    <el-button type="text" @click="handleDelete(scope.$index, tableData)">删除</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-col :span="24" style="text-align: right; margin-top: 5px">
+                <el-pagination v-if="pageshow" @current-change="changePage" :current-page="currentPage" :page-size="20"
+                  layout="total, prev, pager, next, jumper" :total="total" background
+                  style="margin-top: 5px;margin-bottom: 5px;">
+                </el-pagination>
+              </el-col>
+
+            </el-row>
+        </el-scrollbar>
+
+        <el-dialog title="编辑标准薪资" :visible.sync="orderModal" :close-on-click-modal="false" width="50%"
+          style="height: 980px;">
+          <el-form ref="form" :model="seeItem" label-width="80px" class="flexbox">
+            <el-form-item label="基本薪资">
+              <el-input v-model="seeItem.basic_salary" type='number' oninput="value=value.replace(/[^0-9.]/g, '' )">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="绩效薪资" clearable>
+              <el-input v-model="seeItem.merit_salary" @change='jixiaobianhua'>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="通讯补贴" clearable>
+              <el-input v-model="seeItem.communication_subsidy" type='number'
+                oninput="value=value.replace(/[^0-9.]/g, '' )"></el-input>
+            </el-form-item>
+            <el-form-item label="高温补贴" clearable>
+              <el-input v-model="seeItem.high_temperature_subsidy" type='number'
+                oninput="value=value.replace(/[^0-9.]/g, '' )"></el-input>
+            </el-form-item>
+            <el-form-item label="其它补贴" clearable>
+              <el-input v-model="seeItem.other_subsidy" oninput="value=value.replace(/[^0-9.]/g, '' )"></el-input>
+            </el-form-item>
+            <el-form-item label="">
+              <div style="width: 200px"></div>
+            </el-form-item>
+
+          </el-form>
+          <div style="padding-right: 70px">
+            <div slot="footer" class="dialog-footer" style="float: right">
+              <el-button type="primary" @click="getnewsalary">确定</el-button>
+            </div>
+            <div slot="footer" class="dialog-footer" style="float: right; margin: 0 20px">
+              <el-button @click="orderModal = false">取消</el-button>
+            </div>
+            <span style="font-size: 16px; line-height: 40px;float: right" v-if='Number(seeItem.merit_salary)>=0'>总薪资合计:
+              {{Number(seeItem.basic_salary)+Number(seeItem.merit_salary)+Number(seeItem.communication_subsidy)+Number(seeItem.high_temperature_subsidy)+Number(seeItem.other_subsidy)}}
+            </span>
+            <span style="font-size: 16px; line-height: 40px;float: right"
+              v-else-if="seeItem.merit_salary=='绩效奖金包'">总薪资合计:
+              {{Number(seeItem.basic_salary)+Number(seeItem.communication_subsidy)+Number(seeItem.high_temperature_subsidy)+Number(seeItem.other_subsidy)}}
+            </span>
+            <span style="font-size: 16px; line-height: 40px;float: right" v-else="seeItem.merit_salary=='绩效奖金包'">总薪资合计:
+            </span>
+          </div>
+        </el-dialog>
+      </el-main>
+      <!-- 主体部分END -->
+    </el-container>
+  </div>
+  <script type="text/javascript">
+    var file = new FormData();
+    var formData = new FormData();
+    var vm = new Vue({
+      el: "#app",
+      data: {
+        // 不敢动
+        fullHeight: document.documentElement.clientHeight, //可滚动视图高度
+        config: {
+          //添加请求头
+          headers: {
+            "Content-Type":
+              "application/x-www-form-urlencoded; charset=utf-8",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+        },
+        value2: "",
+        showmore: false,
+        value3: "",
+        status: "2",
+        loading: true,
+        dataList: [],
+        successCounts: 0,
+        errorCounts: 0,
+        total: 0,
+        showsearch: true,
+        isShowTable: false,
+        importModal: false,
+        currentPage: 1,
+        totalCount: 1,
+        pageshow: true,
+        startTime: "",
+        endTime: "",
+        auditStart: "",
+        auditEnd: "",
+        seeItem: {},
+        merit_salary_2: '',
+        searchForm: {
+          page: 1,
+          name: "",
+          id: "1",
+          id_card: "",
+          position: "",
+          cost_enter_department: "",
+          status: "",
+          entry_time_start: "",
+          entry_time_end: "",
+          leave_time_start: "",
+          leave_time_end: "",
+        },
+        tableData: [],
+        orderModal: false,
+        indexsee: "",
+        department: [],
+        positionList: [],
+        fileList: [],
+        statusOptions: [
+          {
+            value: "1",
+            label: "试用",
+          },
+          {
+            value: "2",
+            label: "在职",
+          },
+          {
+            value: "3",
+            label: "待离职",
+          },
+          {
+            value: "4",
+            label: "离职",
+          },
+        ],
+        calOptions: [
+          {
+            value: "是",
+            label: "是",
+          },
+          {
+            value: "否",
+            label: "否",
+          }
+        ],
+      },
+      filters: {
+        timestampToTime: function (timestamp) {
+          if (timestamp) {
+            var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+            Y = date.getFullYear() + "-";
+            M =
+              (date.getMonth() + 1 < 10
+                ? "0" + (date.getMonth() + 1)
+                : date.getMonth() + 1) + "-";
+            D =
+              (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) +
+              " ";
+            h =
+              (date.getHours() < 10
+                ? "0" + date.getHours()
+                : date.getHours()) + ":";
+            m =
+              (date.getMinutes() < 10
+                ? "0" + date.getMinutes()
+                : date.getMinutes()) + ":";
+            s =
+              date.getSeconds() < 10
+                ? "0" + date.getSeconds()
+                : date.getSeconds();
+            return Y + M + D;
+          } else {
+            return "";
+          }
+        },
+      },
+      computed: {},
+      watch: {
+        fullHeight: function (val) {
+          if (!this.timer) {
+            this.fullHeight = val;
+            this.timer = true;
+            let that = this;
+            setTimeout(function () {
+              that.timer = false;
+            }, 400);
+          }
+        },
+      },
+      methods: {
+        Onimport() {
+          this.importModal = true;
+        },
+        ztgaibian(val) {
+          ////console.log(val)
+        },
+        see(index, table) {
+          // this.indexsee = 1;
+          ////console.log(index);
+          //console.log(table);
+          this.seeItem = { ...table[index] };
+          // this.seeItem.all_basic_salary = Number(this.seeItem.basic_salary) + Number(this.seeItem.merit_salary) + Number(this.seeItem.communication_subsidy) + Number(this.seeItem.high_temperature_subsidy) + Number(this.seeItem.other_subsidy)
+          // //console.log(Number(this.seeItem.basic_salary)+Number(this.seeItem.merit_salary)+Number(this.seeItem.communication_subsidy)+Number(this.seeItem.high_temperature_subsidy)+Number(this.seeItem.other_subsidy))
+          // //console.log("*******", this.seeItem);
+          this.orderModal = true;
+          // //console.log('当前行的数据',this.seeItem);
+        },
+        handleDelete(index, row) {
+          _this = this;
+          var deldata = new FormData();
+          deldata.append("id", row[index].id);
+          //console.log(row[index].id);
+          this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            $.ajax({
+              url: "/Admin/OASalary/basic_salary_del",
+              type: "post",
+              processData: false,
+              // 告诉jQuery不要去设置Content-Type请求头
+              contentType: false,
+              data: deldata,
+              success: (res) => {
+                //console.log(res)
+                if (res.status == 1) {
+                  this.getList();
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                  });
+                }
+                else {
+                  this.$message.error(`${res.info}`);
+                }
+              },
+              error: function (res) {
+                _this.loading = false;
+                _this.$message.error(
+                  "网络连接发生错误：" + res.status + " " + res.statusText
+                );
+              },
+            });
+
+
+          }).catch(() => {
+            _this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
+        },
+        confirmStartTime(val) {
+          if (this.endTime) {
+            if (this.endTime < val) {
+              this.startTime = "";
+              return this.$message.warning("开始时间必须小于结束时间");
+            }
+          } else if (this.auditEnd) {
+            if (this.auditEnd < val) {
+              this.auditStart = "";
+              return this.$message.warning("开始时间必须小于结束时间");
+            }
+          }
+        },
+        confirmEndTime(val) {
+          if (this.startTime) {
+            if (this.startTime > val) {
+              this.endTime = "";
+              return this.$message.warning("结束时间必须大于开始时间");
+            }
+          } else if (this.auditStart) {
+            if (this.auditStart > val) {
+              this.auditEnd = "";
+              return this.$message.warning("结束时间必须大于开始时间");
+            }
+          }
+        },
+        showmoredetail() {
+          this.showsearch = false
+        },
+        showlesssearch() {
+          this.showsearch = true
+        },
+        daochu() {
+          let url = `/admin/OASalary/dump_basic_salary_list?id=${'0'}`
+          if (this.searchForm.name) {
+            url = url.concat('&name=' + this.searchForm.name)
+          }
+          if (this.searchForm.id_card) {
+            url = url.concat('&id_card=' + this.searchForm.id_card)
+          }
+          if (this.searchForm.position) {
+            url = url.concat('&position_id=' + this.searchForm.position)
+          }
+          if (this.searchForm.level_0) {
+            url = url.concat('&department_id=' + this.searchForm.level_0)
+          }
+          if (this.searchForm.status) {
+            url = url.concat('&status=' + this.searchForm.status)
+          }
+          if (this.searchForm.entry_time_start) {
+            url = url.concat('&entry_time_start=' + this.entry_time_start / 1000)
+          }
+          if (this.searchForm.entry_time_end) {
+            url = url.concat('&entry_time_end=' + this.searchForm.entry_time_end / 1000)
+          }
+          if (this.searchForm.leave_time_start) {
+            url = url.concat('&leave_time_start=' + this.searchForm.leave_time_start / 1000)
+          }
+          if (this.searchForm.leave_time_end) {
+            url = url.concat('&leave_time_end=' + this.searchForm.leave_time_end / 1000)
+          }
+          if (this.newdate) {
+            url = url.concat('&month=' + this.newdate)
+          }
+          window.open(url, '_self');
+        },
+        getnewsalary() {
+          console.log("重新获取数据");
+          // let _this = this;
+          console.log(Number(this.seeItem.merit_salary))
+          if (this.seeItem.merit_salary == '绩效奖金包' || Number(this.seeItem.merit_salary) >= 0) {
+            let url = `/Admin/OASalary/update_basic_salary`;
+            let param = {
+              id: this.seeItem.id,
+            };
+            param.basic_salary = this.seeItem.basic_salary
+              ? this.seeItem.basic_salary
+              : 0;
+            // param.all_basic_salary = this.seeItem.all_basic_salary
+            //   ? this.seeItem.all_basic_salary
+            //   : undefined;
+            param.merit_salary = this.seeItem.merit_salary
+              ? this.seeItem.merit_salary
+              : 0;
+            param.communication_subsidy = this.seeItem.communication_subsidy
+              ? this.seeItem.communication_subsidy
+              : 0;
+            param.high_temperature_subsidy = this.seeItem
+              .high_temperature_subsidy
+              ? this.seeItem.high_temperature_subsidy
+              : 0;
+            param.other_subsidy = this.seeItem.other_subsidy
+              ? this.seeItem.other_subsidy
+              : 0;
+            param.is_calculate = this.seeItem.is_calculate
+              ? this.seeItem.is_calculate
+              : undefined;
+
+            axios
+              .post(url, Qs.stringify(param), this.config)
+              .then((res) => {
+                //console.log(res.data, res.data.status);
+                this.getList();
+                if (res.data.status == 1) {
+                  //console.log('成功')
+                  this.$message({
+                    message: '恭喜你，编辑成功',
+                    type: 'success'
+                  });
+                }
+                else {
+                  this.$message.error(`${res.data.info}`);
+                }
+                this.orderModal = false;
+              })
+              .catch((error) => {
+                //console.log(error);
+              });
+          }
+          else {
+            this.$message('绩效薪资只能输入绩效奖金包或非负数');
+          }
+        },
+        showmoresearch() {
+          this.showmore = !this.showmore
+        },
+        getList() {
+          //console.log("重新获取数据", this.searchForm);
+          // let _this = this;
+          let url = `/Admin/OASalary/basic_salary_list`;
+          let param = {
+            page: this.searchForm.page,
+          };
+          if (this.indexsee == 1) {
+            param.name = this.searchForm.name
+              ? this.searchForm.name
+              : undefined;
+            param.id_card = this.searchForm.id_card
+              ? this.searchForm.id_card
+              : undefined;
+            param.position_id = this.searchForm.position
+              ? this.searchForm.position
+              : undefined;
+            param.department_id = this.searchForm.level_0
+              ? this.searchForm.level_0
+              : undefined;
+            param.status = this.searchForm.status
+              ? this.searchForm.status
+              : undefined;
+            param.entry_time_start = this.searchForm.entry_time_start / 1000
+              ? this.searchForm.entry_time_start / 1000
+              : undefined;
+            param.entry_time_end = this.searchForm.entry_time_end / 1000
+              ? this.searchForm.entry_time_end / 1000
+              : undefined;
+            param.leave_time_start = this.searchForm.leave_time_start / 1000
+              ? this.searchForm.leave_time_start / 1000
+              : undefined;
+            param.leave_time_end = this.searchForm.leave_time_end / 1000
+              ? this.searchForm.leave_time_end / 1000
+              : undefined;
+          }
+          axios
+            .post(url, Qs.stringify(param), this.config)
+            .then((res) => {
+              //console.log(res.data, res.data.status);
+              if (res.data.status == 1) {
+
+                this.tableData = res.data.info.list;
+                this.searchForm.page = parseInt(res.data.info.page)
+                this.total = parseInt(res.data.info.total)
+                if (res.data.info.list.length == 0 && res.data.info.page != 1) {
+                  this.searchForm.page = parseInt(res.data.info.page) - 1
+                  this.getList()
+                }
+                this.loading = false
+                //console.log(this.total)
+                //console.log("1111", this.tableData, res.data.info.list);
+                //console.log(typeof (this.total));
+                // this.indexsee = "";
+              } else if (res.status == 0) {
+                this.tableData = [];
+                this.total = 0;
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
+        },
+        showmorepart() {
+          this.showmore = !this.showmore
+        },
+        jixiaobianhua(val) {
+          console.log(val)
+          console.log(Number(val))
+          console.log(val)
+          if (isNaN(Number(val))) {
+            if (val !== '绩效奖金包') {
+              this.$message('绩效薪资只能输入绩效奖金包或非负数');
+              // this.seeItem.merit_salary = ''
+            }
+          }
+          else {
+            if (Number(val) < 0) {
+              this.$message('绩效薪资只能输入绩效奖金包或非负数');
+              // this.seeItem.merit_salary = ''
+            }
+          }
+        },
+        changele: function () {
+          // 有问题，这个数据
+          var files = document.getElementById("exampleInputFile").files;
+          //console.log("上传的文件");
+          //console.log(files);
+          //console.log(file);
+          if (files.length) {
+            //console.log("jinlaile");
+            //console.log("files[0]");
+            file.append("file", files[0]);
+            ////console.log(file);
+          } else {
+            file.delete("file");
+          }
+        },
+        progressFile: function () {
+          var that = this;
+          $.ajax({
+            url: "/Admin/OASalary/batch_update_basic_salary",
+            data: file,
+            type: "post",
+            processData: false,
+            // 告诉jQuery不要去设置Content-Type请求头
+            contentType: false,
+            success: function (data) {
+              ////console.log("chuguile");
+              ////console.log(file);
+              ////console.log(data);
+              that.getList();
+            },
+          });
+        },
+        changePage(e) {
+          this.searchForm.page = e;
+          // this.indexsee = 1;
+          this.getList();
+        },
+        onSearch() {
+          this.loading = true;
+          this.indexsee = 1;
+          this.searchForm.page = 1
+          this.getList();
+          this.pageshow = false
+          this.$nextTick(() => {
+            this.pageshow = true
+          })
+        },
+        onReset() {
+          this.searchForm.page = 1;
+          this.searchForm.name = "";
+          this.searchForm.id = "";
+          this.searchForm.id_card = "";
+          this.searchForm.position = "";
+          this.searchForm.level_0 = "";
+          this.searchForm.status = "";
+          this.searchForm.entry_time_start = "";
+          this.searchForm.entry_time_end = "";
+          this.searchForm.leave_time_start = "";
+          this.searchForm.leave_time_end = "";
+          this.getList();
+          this.pageshow = false
+          this.$nextTick(() => {
+            this.pageshow = true
+          })
+        },
+        handleCurrentChange(val) {
+          //切换页码
+          const _this = this;
+          _this.searchForm.page = val;
+          _this.loading = true;
+          _this.tableData = [];
+          // _this.getList();
+        },
+        getArea() {
+          //获取所在部门
+          const _this = this;
+          $.ajax({
+            url: "/Admin/OAIndex/get_department_list",
+            type: "get",
+            success: function (data) {
+              if (data.status == 1) {
+                //   //console.log("所在部门");
+                //   //console.log(data.info);
+                data.info.forEach((el, i) => {
+                  // //console.log("el");
+                  // //console.log(el.name);
+                  _this.department.push({
+                    value: el.id,
+                    label: el.name,
+                  });
+                });
+              } else {
+                _this.$message.warning(data.info);
+              }
+            },
+            error: function (data) {
+              _this.$message.error(
+                "网络连接发生错误:" + data.status + " " + data.statusText
+              );
+            },
+          });
+        },
+
+        getPosition() {
+          //获取员工职位
+          const _this = this;
+          $.ajax({
+            url: "/Admin/OAIndex/get_position_list",
+            type: "get",
+            success: function (data) {
+              if (data.status == 1) {
+                //   //console.log("所在岗位");
+                //   //console.log(data.info);
+                data.info.forEach((el, i) => {
+                  // //console.log("el");
+                  // //console.log(el);
+                  _this.positionList.push({
+                    value: el.id,
+                    label: el.name,
+                  });
+                });
+              } else {
+                _this.$message.warning(data.info);
+              }
+            },
+            error: function (data) {
+              _this.$message.error(
+                "网络连接发生错误:" + data.status + " " + data.statusText
+              );
+            },
+          });
+        },
+      },
+      created() {
+        this.getList();
+        this.getArea();
+        this.getPosition();
+      },
+      mounted() {
+        const that = this;
+        window.onresize = () => {
+          return (() => {
+            window.fullHeight = document.documentElement.clientHeight;
+            that.fullHeight = window.fullHeight;
+          })();
+        };
+      },
+    });
+  </script>
+</body>
+
+</html>

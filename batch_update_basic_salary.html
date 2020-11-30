@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>优车库-后台管理中心</title>
+  <!-- 引入bootstrap的css文件 -->
+  <link rel="stylesheet" href="__PUBLIC__/bootstrap/dist/css/bootstrap.min.css" />
+  <!-- 引入基础css文件 -->
+  <link rel="stylesheet" href="__PUBLIC__/css/admin/Hs-20190101/common.css" />
+  <!-- 引入页面css文件 -->
+  <link rel="stylesheet" href="__PUBLIC__/css/admin/Hs-20190101/datalist.css" />
+
+  <link href="__PUBLIC__/css/admin/combo.select.css" rel="stylesheet" type="text/css" />
+
+  <link rel="stylesheet" href="__PUBLIC__/css/admin/element-ui.css" />
+  <script src="__PUBLIC__/js/vue.min.js"></script>
+  <script src="__PUBLIC__/js/admin/element-ui.js"></script>
+  <style>
+    body {
+      padding: 0px;
+    }
+
+    #myVue {
+      padding: 0px 30px;
+    }
+
+    .jq22 {
+      height: 36px !important;
+      border-radius: 7px;
+      margin-right: 15px;
+    }
+
+    .combo-input {
+      height: 34px !important;
+      padding: 5px !important;
+    }
+
+    .select-box form>.btn-group.fgroup .btn-group button {
+      width: 120px;
+    }
+
+    .select-box form>.btn-group ul {
+      min-width: 120px;
+      width: 100%;
+    }
+
+    .combo-dropdown li {
+      width: 100%;
+    }
+
+    .shangpai {
+      width: 120px !important;
+    }
+
+    /* 分页的样式 */
+    .paginationbox {
+      margin: 10px 50px 30px;
+      float: right;
+      height: 30px;
+    }
+
+    .paginationbox div {
+      float: left;
+      margin-left: 8px;
+      min-width: 24px;
+      height: 28px;
+      border: 1px solid #bbbbbb;
+    }
+
+    .paginationbox div a {
+      list-style: none;
+      text-decoration: none;
+      color: #262626;
+      padding: 5px;
+      display: block;
+      width: 100%;
+      height: 27px;
+      text-align: center;
+      line-height: 17px;
+    }
+
+    .paginationbox .isactive {
+      background-color: #0099ff;
+      color: #fff;
+      cursor: default;
+    }
+
+    .paginationbox .isdisabled {
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .paginationbox .totalcount {
+      cursor: default;
+    }
+
+    .shenlue {
+      border: 1px solid rgba(0, 0, 0, 0);
+    }
+
+    .code4 {
+      min-width: 86px;
+    }
+
+    .code2 {
+      min-width: 45px;
+    }
+
+    .code6 {
+      min-width: 100px;
+    }
+
+    .tipmassge {
+      margin-top: 20px;
+      margin-left: 32px;
+      font-size: 16px;
+      color: #333333;
+    }
+
+    /* 可以设置不同的进入和离开动画 */
+    /* 设置持续时间和动画函数 */
+    .slide-fade-enter-active {
+      transition: all 0.3s ease;
+    }
+
+    .slide-fade-leave-active {
+      transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+    }
+
+    .slide-fade-enter,
+    .slide-fade-leave-to
+
+    /* .slide-fade-leave-active for below version 2.1.8 */
+      {
+      transform: translateX(10px);
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header-title">批量录入员工标准薪资</div>
+  <div id="myVue" style="min-width: 1400px">
+    <div class="add-merchant">
+      <a class="btn btn-success" href="./basic_salary_list.html" role="button">返回</a>
+    </div>
+    <div class="select-box container-fluid">
+      <form class="form-inline row">
+        <div class="btn-group col-lg-2 col-md-2 col-sm-2 col-xs-2 shaixuan" role="group" aria-label="...">
+          <a href="/Public/file/OA/批量导入薪资标准.xlsx" class="btn btn-success"
+            style="color: #fff; height: 34px; margin-left: 150px"><img
+              style="height: 15px; position: relative; bottom: 2px" src="/Public/images/admin/admin_img/download.png"
+              alt="" />
+            下载录入模版</a>
+        </div>
+        <div class="btn-group col-lg-4 col-md-4 col-sm-4 col-xs-4 fgroup" role="group" aria-label="...">
+          <!-- <button type="button" class="btn btn-default nonobtn" style="min-width:70px; width: 70px; margin-left: 25px;">上牌时间 :</button> -->
+          <input type="file" @change="changele" id="exampleInputFile" placeholder="选择上传文件"
+            style="padding: 4px 0; height: 33px; margin-left: 80px" />
+          <button type="button" class="btn btn-primary" @click="progressFile" style="
+                text-align: center;
+                margin-left: 50px;
+                border-radius: 0px;
+                padding-left: 5px;
+              ">
+            上传
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="tipmassge" v-show="isShowTable">
+      <!-- 本次操作总计上传数据{{totalCount}}条,其中成功录入{{successCounts}}条,<span
+          >失败{{errorCounts}}条!</span -->
+      <!-- > -->
+      具体情况如下表所示 :
+    </div>
+    <transition name="slide-fade">
+      <div class="data-box" v-show="isShowTable">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="code2">序号</th>
+              <th>提示</th>
+              <th style="min-width: 400px">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(value,index) in dataList">
+              <th scope="row" class="roww">{{index+1}}</th>
+              <td>
+                <p v-for="item in value" ::key="item">
+                  {{item}}
+                </p>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </transition>
+    <transition name="slide-fade">
+      <div class="data-box" v-show="isShowTabletwo">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="code2">序号</th>
+              <th>提示</th>
+              <th style="min-width: 400px">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <th scope="row" class="roww">{{tip}}</th>
+            <td>{{tipvalue}}</td>
+            <td>&nbsp;</td>
+          </tbody>
+        </table>
+      </div>
+
+
+
+    </transition>
+  </div>
+  <!-- 引入jquery -->
+  <script src="__PUBLIC__/js/jquery-1.12.4.min.js"></script>
+  <script type="text/javascript" src="__PUBLIC__/js/admin/jquery.combo.select.js"></script>
+  <!-- 引入bootstrap的js文件 -->
+  <script src="__PUBLIC__/bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <script>
+    function getQueryString(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      var r = window.location.search.substr(1).match(reg);
+      if (r != null) return unescape(r[2]);
+      return null;
+    }
+    var file = new FormData();
+
+    var app = new Vue({
+      el: "#myVue",
+      data: {
+        dataList: [],
+        successCounts: 0,
+        errorCounts: 0,
+        totalCount: 0,
+        isShowTable: false,
+        isShowTabletwo: false,
+        tip: '',
+        tipvalue: '',
+      },
+      methods: {
+        changele: function () {
+          var files = document.getElementById("exampleInputFile").files;
+          //console.log("第一次");
+          //console.log(files);
+          if (files.length) {
+            file.delete("file");
+            file.append("file", files[0]);
+          } else {
+            file.delete("file");
+          }
+        },
+        progressFile() {
+          var that = this;
+          const loading = that.$loading({
+            lock: true,
+            text: '上传中',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          });
+          that.dataList = [];
+
+          $.ajax({
+            url: "/Admin/OASalary/batch_update_basic_salary",
+            data: file,
+            type: "post",
+            processData: false,
+            // 告诉jQuery不要去设置Content-Type请求头
+            contentType: false,
+            success: (data) => {
+              //console.log(data);
+              //console.log(data.info);
+              console.log('typeof (xuhao)')
+              console.log(typeof (xuhao))
+              if (data.info.length) {
+                var hdList = data.info;
+                if (typeof (hdList) == "string") {
+                  //  alert('错了哦，这是一条错误消息');
+                  that.$message.error(`${hdList}`);
+                  loading.close();
+                }
+                else {
+                  that.dataList = Array.from(hdList);
+                  that.dataList.forEach(function (value) {
+                    console.log("每一项")
+                    //console.log(value)
+                    console.log('typeof (xuhao)')
+                    console.log(typeof (xuhao))
+                    that.totalCount++;
+                    if (value.status) {
+                      that.successCounts++;
+                    } else {
+                      that.errorCounts++;
+                    }
+                    console.log('typeof (xuhao)')
+                    console.log(typeof (xuhao))
+                    that.isShowTable = true;
+                    loading.close();
+                  });
+
+                }
+              }
+              else {
+                var xuhao = data.info;
+                console.log('typeof (xuhao)')
+                console.log(typeof (xuhao))
+
+                for (const key in xuhao) {
+                  that.dataList.push(xuhao[key])
+                }
+
+
+
+                that.isShowTable = true;
+                loading.close();
+                // // var shuhaozhi = data.info[]
+                // for (var i in xuhao) {
+                //   that.tip = i;
+                //   that.tipvalue = xuhao[i][0];
+                //   console.log(that.tip)
+                // }
+                // console.log(that.tip)
+              }
+            }
+          });
+        },
+      },
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,2374 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7,chrome=1" />
+    <!-- 引入样式 -->
+    <link href="__PUBLIC__/css/admin/reset.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/admin/element-ui.css" />
+    <!-- <link rel="stylesheet" href="__PUBLIC__/css/admin/element_public.css" /> -->
+    <!-- 引入组件库 -->
+    <script src="__PUBLIC__/js/vue.min.js"></script>
+    <script src="__PUBLIC__/js/admin/element-ui.js"></script>
+    <script src="__PUBLIC__/js/admin/axios.min.js"></script>
+    <script src="__PUBLIC__/js/admin/qs.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery-1.7.2.min.js"></script>
+    <style>
+        body {
+            overflow: hidden;
+            padding-right: 0 !important;
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        }
+
+        .c_red {
+            color: red;
+            padding: 0 2px;
+        }
+
+        .p_10 {
+            padding: 10px;
+        }
+
+        .p_20 {
+            padding: 20px;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .el-header {
+            height: auto !important;
+            background: #09f;
+            text-indent: 20px;
+            font-size: 20px;
+            /* font-weight: bold; */
+            padding: 5px;
+            color: white;
+        }
+
+        .filter-box {
+            border-radius: 5px;
+            margin: 20px auto;
+            margin-bottom: 0;
+        }
+
+        .filter-box .el-form--inline .el-form-item {
+            margin-right: 25px;
+        }
+
+        .imgselectedparent:hover .imgselected {
+            display: block !important;
+        }
+
+        /*弹窗*/
+
+        .el-dialog__header {
+            background: #409eff;
+            padding: 10px 20px;
+        }
+
+        .el-dialog__title {
+            /* font-weight: bold; */
+            color: #ffffff;
+        }
+
+        .el-dialog__headerbtn .el-dialog__close,
+        .el-dialog__headerbtn:focus .el-dialog__close,
+        .el-dialog__headerbtn:hover .el-dialog__close {
+            color: #ffffff;
+        }
+
+        .el-dialog__headerbtn {
+            top: 15px;
+        }
+
+        .el-dialog__body {
+            max-height: 240px;
+            overflow: auto;
+            padding-top: 10px;
+            padding-bottom: 50px;
+        }
+
+        .el-dialog__body::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .el-dialog__body::-webkit-scrollbar-thumb {
+            background-color: #ddd;
+            border-radius: 3px;
+        }
+
+        .el-table td,
+        .el-table th {
+            text-align: center !important;
+            font-size: 13px;
+        }
+
+        .el-table td {
+            padding: 3px 0;
+        }
+
+        /* .el-table__header-wrapper .el-checkbox {
+          display: none
+      } */
+
+        .p-title {
+            font-size: 13px;
+            /* font-weight: bold; */
+            position: relative;
+            padding: 10px;
+            margin-left: 20px;
+            margin-bottom: 5px;
+        }
+
+        .p-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 49%;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            width: 5px;
+            height: 16px;
+            background: #409eff;
+            border-radius: 3px;
+        }
+
+        .hideUpload>.el-upload--picture-card {
+            display: none;
+        }
+
+        .upload-box p {
+            margin: 10px 0;
+        }
+
+        th .el-table_1_column_63 .is-leaf {
+            border-bottom: #c8d5f3 1px solid !important;
+        }
+
+        .el-select-dropdown__list {
+            max-width: 250px;
+        }
+
+        .el-col-12 .el-input {
+            width: 200px;
+        }
+
+        .el-table .cell a {
+            color: #409eff;
+        }
+
+        .el-upload--picture-card,
+        .el-upload-list--picture-card .el-upload-list__item {
+            width: 90px;
+            height: 90px;
+        }
+
+        .el-upload--picture-card i {
+            line-height: 3;
+        }
+
+        .table-fixed .el-table__fixed-right {
+            height: 100% !important;
+        }
+
+        .table-fixed .el-table__fixed {
+            height: 100% !important;
+        }
+
+        .el-tooltip__popper {
+            max-width: 300px;
+            line-height: 1.5;
+        }
+
+        .pic-box {
+            display: inline-block;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .el-badge__content.is-fixed {
+            z-index: 10;
+        }
+
+        .el-radio-button:first-child .el-radio-button__inner {
+            border-radius: 0;
+        }
+
+        .content-menu {
+            margin-top: 20px;
+            padding-left: 10px;
+        }
+
+        .content-menu li {
+            float: left;
+            margin: 0 20px 10px 20px;
+        }
+
+        .content-menu li a {
+            font-size: 15px;
+            display: block;
+            color: #818181;
+        }
+
+        .el-input el-input--suffix {
+            font-size: 20px;
+            color: #ffffff;
+        }
+
+        .block .el-input__inner {
+            margin-left: 20px;
+            /* background-color: #0099ff; */
+            font-size: 18px;
+        }
+
+        .el-date-editor .el-input .el-input--prefix .el-input--suffix .el-date-editor--month {
+            width: 180px;
+            height: 30px;
+        }
+
+        .dataList .el-input__inner {
+            width: 200px;
+            height: 35px;
+        }
+
+        .dataList {
+            display: flex;
+        }
+
+        .flexbox {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .el-dialog__footer {
+            box-sizing: content-box;
+        }
+
+        .el-dialog {
+            height: 350px;
+        }
+
+        .el-table_1_column_54.is-leaf {
+            height: 67px;
+        }
+
+        .el-table__header-wrapper th {
+            border-right-width: 0;
+        }
+
+        .el-table--border td,
+        .el-table--border th,
+        .el-table__body-wrapper .el-table--border.is-scrolling-left~.el-table__fixed {
+            border-right-width: 0;
+        }
+
+        .el-container.is-vertical {
+            margin-left: 24px;
+            margin-top: 24px;
+            background-color: #ffffff;
+        }
+
+        .el-container.is-vertical .el-header {
+            background-color: #2d69d2;
+        }
+
+        .p_20 {
+            padding: 0;
+        }
+
+        .el-table__header tr,
+        .el-table__header th {
+            padding: 0;
+            height: 10px;
+        }
+
+        .el-table_1_column_63 {
+            height: 67px !important;
+        }
+
+        .el-table_1_column_4,
+        .el-table_1_column_16,
+        .el-table_1_column_23,
+        .el-table_1_column_27,
+        .el-table_1_column_38,
+        .el-table_1_column_45 {
+            background-color: #a0adcc !important;
+            color: ivory !important;
+            height: 15px !important;
+        }
+
+        
+        .el-table_1_column_43.is-leaf,
+        .el-table_1_column_44.is-leaf {
+            background-color: #a0adcc !important;
+            color: ivory !important;
+            border-right: #e7ecfa 1px solid !important;
+        }
+        .el-table_1_column_1.is-leaf,
+        .el-table_1_column_2.is-leaf,
+        .el-table_1_column_3.is-leaf{
+            background-color: #a0adcc !important;
+            color: ivory !important;
+            border-right: none;
+        }
+        
+        .el-table_1_column_3.is-leaf{
+            border-right: #e7ecfa 1px solid !important;
+        }
+        .el-table_1_column_16,
+        .el-table_1_column_23,
+        .el-table_1_column_27,
+        .el-table_1_column_38,
+        .el-table_1_column_43,
+        .el-table_1_column_44,
+        .el-table_1_column_45,
+        .el-table_1_column_1_column_15,
+        .el-table_1_column_16_column_22,
+        .el-table_1_column_23_column_26,
+        .el-table_1_column_27_column_37,
+        .el-table_1_column_38_column_42,
+        .el-table_1_column_44_column_46,
+        .el-table_1_column_45_column_53 {
+            border-right: #e7ecfa 1px solid !important;
+        }
+
+        thead.is-group.has-gutter tr:last-child {
+            height: 43px !important;
+        }
+
+        .jq22 {
+            height: 36px !important;
+            border-radius: 7px;
+            margin-right: 15px;
+        }
+
+        .el-table th,
+        .el-table tr {
+            font-weight: normal;
+        }
+
+        .combo-input {
+            height: 34px !important;
+            padding: 5px !important;
+        }
+
+        .el-table th,
+        .el-table tr {
+            font-weight: normal;
+        }
+
+        .select-box form>.btn-group.fgroup .btn-group button {
+            width: 120px;
+        }
+
+        .select-box form>.btn-group ul {
+            min-width: 120px;
+            width: 100%;
+        }
+
+        .combo-dropdown li {
+            width: 100%;
+        }
+
+        .shangpai {
+            width: 120px !important;
+        }
+
+        /* 分页的样式 */
+
+
+
+        .shenlue {
+            border: 1px solid rgba(0, 0, 0, 0);
+        }
+
+        .code4 {
+            min-width: 86px;
+        }
+
+        .code2 {
+            min-width: 45px;
+        }
+
+        .code6 {
+            min-width: 100px;
+        }
+
+        .tipmassge {
+            margin-top: 20px;
+            margin-left: 32px;
+            font-size: 16px;
+            color: #333333;
+        }
+
+        .color_1 {
+            /* background-color: #FF836B; */
+            border-bottom: #409eff 1px solid;
+        }
+
+        /* 可以设置不同的进入和离开动画 */
+        /* 设置持续时间和动画函数 */
+        .slide-fade-enter-active {
+            transition: all 0.3s ease;
+        }
+
+        .slide-fade-leave-active {
+            transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+        }
+
+        .slide-fade-enter,
+        .slide-fade-leave-to
+
+        /* .slide-fade-leave-active for below version 2.1.8 */
+            {
+            transform: translateX(10px);
+            opacity: 0;
+        }
+
+        div .filter-box .el-row {
+            margin-bottom: 5px !important;
+        }
+    </style>
+</head>
+
+<body width="100%" class="ac_manage">
+    <div id="app" v-cloak>
+        <el-container>
+            <!-- 头部部分 -->
+            <el-header ref="header">
+                <div class="dataList">
+                    <div class="block">
+                        <el-date-picker v-model="newdate" type="month" placeholder="请选择年和月" @change='getnewlist'
+                            clearable>
+                        </el-date-picker>
+                    </div>
+                    <div style="margin: 0 auto ;line-height:37px ;">工资条</div>
+                </div>
+            </el-header>
+            <!-- 主体部分 START -->
+            <el-main :style="'height:'+(fullHeight-50)+'px;'" style="padding: 0;padding-bottom: -100px;">
+                <el-scrollbar style="height: 100%">
+                    <el-row class="filter-box">
+                        <el-form :inline="true" :model="searchForm" size="mini" v-if='showsearch'>
+                            <el-form-item label="姓名: " style="padding-left: 20px">
+                                <el-input v-model="searchForm.name" placeholder="请输入员工姓名" style="width: 120px">
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="身份证号：">
+                                <el-input v-model="searchForm.id_card" placeholder="请输入身份证号" type='number'
+                                    oninput="value=value.replace(/[^0-9.]/g, '' )"></el-input>
+                            </el-form-item>
+                            <el-form-item label="岗位：">
+                                <el-select v-model="searchForm.position_id" filterable placeholder="请选择岗位">
+                                    <el-option v-for="item in positionList" :key="item.value" :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="部门：">
+                                <el-select v-model="searchForm.department_id" filterable placeholder="请选择部门">
+                                    <el-option v-for="item in department" :key="item.id" :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="状态：">
+                                <el-select v-model="searchForm.status" placeholder="请选择" @change="changeArea"
+                                    style="width: 120px">
+                                    <el-option v-for="item in statusOptions" :key="item.value" :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="核对状态：">
+                                <el-select v-model="searchForm.confirmStatus" placeholder="请选择" @change="changeArea"
+                                    style="width: 120px">
+                                    <el-option v-for="item in confirmOptions" :key="item.value" :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="派发状态：">
+                                <el-select v-model="searchForm.sendStatus" placeholder="请选择" @change="changeArea"
+                                    style="width: 120px">
+                                    <el-option v-for="item in sendOptions" :key="item.value" :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="实发状态：" style="padding-left: 20px">
+                                <el-select v-model="searchForm.completeStatus" placeholder="请选择" @change="changeArea">
+                                    <el-option v-for="item in completeOptions" :key="item.value" :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+
+                            <el-form-item label="入职时间:" style="padding-left: 20px">
+                                <el-date-picker v-model="searchForm.entry_time_start" type="date"
+                                    value-format="timestamp" style="width: 180px" placeholder="选择开始时间"
+                                    format="yyyy-MM-dd" @change="confirmStartTime">
+                                </el-date-picker>
+                                ~
+                                <el-date-picker v-model="searchForm.entry_time_end" type="date" value-format="timestamp"
+                                    style="width: 180px" placeholder="选择结束时间" format="yyyy-MM-dd"
+                                    @change="confirmEndTime">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="离职时间:" style="padding-left: 20px">
+                                <el-date-picker v-model="searchForm.leave_time_start" type="date"
+                                    value-format="timestamp" style="width: 180px" placeholder="选择开始时间"
+                                    format="yyyy-MM-dd" @change="confirmStartTime">
+                                </el-date-picker>
+                                ~
+                                <el-date-picker v-model="searchForm.leave_time_end" type="date" value-format="timestamp"
+                                    style="width: 180px" placeholder="选择结束时间" format="yyyy-MM-dd"
+                                    @change="confirmEndTime">
+                                </el-date-picker>
+                            </el-form-item>
+
+                            <el-form-item>
+                                <el-button type="primary" @click="onSearch">查询</el-button>
+                                <el-button @click="onReset">重置</el-button>
+                                <el-button @click="daochu">导出</el-button>
+                                <el-button @click="showlesssearch">隐藏搜索条件</el-button>
+                            </el-form-item>
+                        </el-form>
+                        <el-form :inline="true" :model="searchForm" size="mini" v-else>
+                            <el-form-item label="姓名: " style="padding-left: 20px">
+                                <el-input v-model="searchForm.name" placeholder="请输入员工姓名" style="width: 120px">
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="身份证号：">
+                                <el-input v-model="searchForm.id_card" placeholder="请输入身份证号" type='number'
+                                    oninput="value=value.replace(/[^0-9.]/g, '' )"></el-input>
+                            </el-form-item>
+                            <el-form-item label="部门：">
+                                <el-select v-model="searchForm.department_id" filterable placeholder="请选择部门">
+                                    <el-option v-for="item in department" :key="item.id" :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="onSearch">查询</el-button>
+                                <el-button @click="onReset">重置</el-button>
+                                <el-button @click="daochu">导出</el-button>
+                                <el-button @click="showmoresearch">展开搜索条件</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-row>
+                    <el-row style="margin: 0 0 20px 10px;">
+                        <el-button type="small" @click="getnewsalary">生成工资条</el-button>
+                        <el-button type="small" @click="onConfirm">批量核对</el-button>
+                        <el-button type="small" @click="onSend">批量派发</el-button>
+                        <el-button type="small" @click="onComplete">批量确认实发</el-button>
+                        <el-button type="small" @click="refresh">刷新</el-button>
+                    </el-row>
+                    <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
+                        :header-cell-style="{background:'#c8d5f3',color:'#3f76db'}" highlight-current-row
+                        @selection-change="handleSelectionChange" max-height="450" stripe :cell-style="columnStyle"
+                        v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(0, 0, 0, 0.8) " @select="singleCheckboxChange"
+                        @select-all="allCheckboxChange">
+                        <el-table-column type="selection" width="55" fixed='left'>
+                        </el-table-column>
+                        <el-table-column  label="序号" type="index" width="50"
+                            :index='(index)=> index+1+ 20*(searchForm.page-1) ' fixed='left'>
+                        </el-table-column>
+                        <el-table-column label="姓名" fixed='left'>
+                            <template slot-scope="scope">
+                                <a class="btn btn-success"
+                                    :href="`./salary_detail?id=${scope.row.id}`">{{ scope.row.name || "-" }}</a>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="基本信息">
+                            <el-table-column label="工号" width="100px">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.staff_no || "-" }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="月份" width="100px">
+                                <template slot-scope="scope">
+                                    <span> {{scope.row.month.substring(0, 7)||newdate.substring(0, 7)}} </span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="问题反馈">
+                                <template slot-scope="scope">
+                                    <span style="color: red;">{{ scope.row.suggestion || "-" }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="身份证号" width="170" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.id_card || "-" }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="成本中心" show-overflow-tooltip width="100px" border>
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.cost_enter_department || "未上传"  }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="一级部门" show-overflow-tooltip width="100px">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.level_0 || "未上传" }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="二级部门">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.level_1 || "-" }}</span>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="职位" width="120px">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.position || "未上传" }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="入职日期" width="120px">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.entry_time }}</span>
+                                </template>
+                            </el-table-column>
+                            <!-- <el-table-column label="入职日期" width="120px">
+                  <template slot-scope="scope">
+                    <span>{{ parseInt(scope.row.entry_time)*1000 |
+                        timestampToTime }}</span>
+                  </template>
+                </el-table-column> -->
+                            <el-table-column label="离职日期" width="100px">
+                                <template slot-scope="scope">
+                                    <span>{{  scope.row.leave_time || "未上传"  }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="状态">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.status || "未上传" }}</span>
+                                </template>
+                            </el-table-column>
+                        </el-table-column>
+                        <el-table-column label="标准薪资">
+                            <el-table-column label="基本薪资">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_basic_salary.basic_salary || "未上传" }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="基本绩效">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_basic_salary.merit_salary || "未上传" }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="高温补贴">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_basic_salary.high_temperature_subsidy || "未上传" }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="通讯补贴">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_basic_salary.communication_subsidy || "未上传" }}</span>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="其它补贴">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_basic_salary.other_subsidy || "未上传" }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="合计">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_basic_salary.all_basic_salary  }}</span>
+                                </template>
+                            </el-table-column>
+                        </el-table-column>
+                        <el-table-column label="考勤信息">
+                            <el-table-column label="应出勤">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_attence.full_days || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="实出勤">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_attence.work_days || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="计薪天数">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_attence.calc_days || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                        </el-table-column>
+                        <el-table-column label="本月薪资" style="background-color: pink">
+                            <el-table-column label="基础薪资">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.this_month_salary.basic_salary || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="绩效基数">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.this_month_salary.actual_merit_salary || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="最终绩效系数" width="120">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.this_month_salary.merit_coefficient || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="绩效工资">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.this_month_salary.final_merit_salary || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="提成">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.this_month_salary.all_communication || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="通讯补贴">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.this_month_salary.communication_subsidy || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="高温补贴">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.this_month_salary.high_temperature_subsidy || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="其他补贴">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.this_month_salary.other_subsidy || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="全勤奖">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.this_month_salary.full_attence || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="其他应加">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_other_addition_deduction.other_addition || '未上传' 
+                                      }}</span>
+                                </template>
+                            </el-table-column>
+                        </el-table-column>
+                        <el-table-column label="薪资扣减项" style="background-color: pink">
+                            <el-table-column label="社保">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_deduction.social_security || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="公积金">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_deduction.provident || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="其它应减">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_other_addition_deduction.other_deduction || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="个人所得税" width="100">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.oa_deduction.personal_tax || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                        </el-table-column>
+                        <el-table-column label="本月应发">
+                            <template slot-scope="scope">
+                                <span>{{ scope.row.this_month_salary.this_month_should_pay||
+                                  "-" }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="实发工资">
+                            <template slot-scope="scope">
+                                <span>{{ scope.row.this_month_salary.this_month_actual_pay||
+                                  "-" }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="其他信息" style="background-color: pink !important">
+                            <el-table-column label="银行卡">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.bank_number || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="工资表时间" width="100">
+                                <template slot-scope="scope">
+                                    <span>{{ parseInt(scope.row.add_time)*1000 |
+                      timestampToTime  }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="核对状态">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.is_confirm || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="最新核对时间" width="150">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.confirm_time || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="派发状态">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.is_send || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="最新派发时间" width="150">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.send_time || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="实发状态">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.is_complete || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="人事确认实发时间" width="150">
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row.complete_time || '未上传' }}</span>
+                                </template>
+                            </el-table-column>
+                        </el-table-column>
+                        <el-table-column label="操作" width="200" fixed="right">
+                            <template slot-scope="scope">
+                                <!-- 需修改 -->
+                                <!-- <a class="btn btn-success" :href="`./salary_detail?id=${scope.row.id}`">详情</a> -->
+                                <el-button type="text">
+                                    <span v-if="scope.row.is_confirm == '未核对'" style="color:#409eff"
+                                        @click="btnConfirm(scope.row.id)">未核对</span>
+                                    <span v-if="scope.row.is_confirm == '已核对'"
+                                        style="color:#6F7C8D ;cursor:default">已核对</span>
+                                </el-button>
+                                <el-button type="text">
+                                    <span v-if="scope.row.is_send == '未派发'" style="color:#409eff"
+                                        @click="btnSend(scope.row.id)">未派发</span>
+                                    <span v-if="scope.row.is_send == '已派发'"
+                                        style="color:#6F7C8D;cursor:default">已派发</span>
+                                </el-button>
+                                <el-button type="text">
+                                    <span v-if="scope.row.is_complete =='未实发'" style="color#409eff"
+                                        @click="btnComplete(scope.row.id)">未实发</span>
+                                    <span v-if="scope.row.is_complete =='已实发'"
+                                        style="color:#6F7C8D;cursor:default">已实发</span>
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-col :span="24" style="text-align: right; margin-top: 5px">
+                        <el-pagination v-if="pageshow" @current-change="changePage" :current-page="currentPage"
+                            :page-size="20" layout="total, prev, pager, next, jumper" :total="total" background
+                            style="margin-top: 20px;margin-bottom: 20px;">
+                        </el-pagination>
+                    </el-col>
+                </el-scrollbar>
+
+
+            </el-main>
+            <!-- 主体部分END -->
+        </el-container>
+        <el-dialog title="提示" :visible.sync="orderModal" width='95%' :close-on-click-modal="false"
+            style='overflow: hidden;'>
+            <table class="table table-striped">
+                <thead>
+                    <tr style='font-size: 20px;'>
+                        <th style='font-size: 20px;width: 100px;text-align: left;'>姓名</th>
+                        <th style='font-size: 20px;margin-left: 50px;'>检查信息</th>
+                    </tr>
+                </thead>
+                <tbody style='font-size: 16px;'>
+                    <tr v-for="(value,index) in dataList" :class='color_1'>
+                        <td style='width: 100px;'>
+                            {{keyname[index]}}
+                        </td>
+                        <td>
+                            <p v-for="item in value" :key="item" style='margin-left: 50px;display: inline;'>
+                                {{item.toString()}}
+                            </p>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="padding-right: 70px;padding-top: 50px;">
+                <div slot="footer" class="dialog-footer" style="float: right">
+                    <el-button type="primary" @click="orderModal= false">确定</el-button>
+                </div>
+                <div slot="footer" class="dialog-footer" style="float: right; margin: 0 20px">
+                    <el-button @click="orderModal = false">取消</el-button>
+                </div>
+            </div>
+        </el-dialog>
+    </div>
+    <script type="text/javascript">
+        var file = new FormData();
+        var formData = new FormData();
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                fullHeight: document.documentElement.clientHeight, //可滚动视图高度
+                theadStyle: {
+                    background: "#f5f7fa",
+                    height: "30px",
+                    lineHeight: "30px",
+                },
+                config: {
+                    //添加请求头
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded; charset=utf-8",
+                        "X-Requested-With": "XMLHttpRequest",
+                    },
+                },
+                value2: "2020-09",
+                value5: "09",
+                value3: "",
+                showAddVehicle: false, // 新增整备弹窗
+                showDaily: false,
+                loading: true,
+                dataList: [],
+                selectedCar: [],
+                successCounts: 0,
+                errorCounts: 0,
+                total: 0,
+                isShowTable: false,
+                importModal: false,
+                currentPage: 1,
+                totalCount: 1,
+                startTime: "",
+                endTime: "",
+                auditStart: "",
+                checkedcontent: [],
+                auditEnd: "",
+                seeItem: {},
+                newdate: '',
+                searchForm: {
+                    page: 1,
+                    name: "",
+                    id: "1",
+                    id_card: "",
+                    position_id: "",
+                    department_id: "",
+                    status: "",
+                    confirmStatus: '',
+                    sendStatus: '',
+                    completeStatus: '',
+                    entry_time_start: "",
+                    entry_time_end: "",
+                    leave_time_start: "",
+                    leave_time_end: "",
+                },
+                activeIndex: '1',
+                activeIndex2: '1',
+                kg_name: "",
+                kg_tel: "",
+                addForm: {},
+                notselected: [],
+                tableData: [],
+                multipleSelection: [],
+                areaList: [], //所在部门
+                provinceList: [], // 所在省份
+                cityList: [], //所在城市
+                areaId: "", // 区域ID
+                provinceId: "", // 省份ID
+                dialogVisible: false,
+                dialogImageUrl: "",
+                imgList: [],
+                picList1: [],
+                picList2: [],
+                picList3: [],
+                picList4: [],
+                picList5: [],
+                keyname: '',
+                color_1: 'color_1',
+                color_2: 'color_2',
+                isLt2M: "",
+                isLt2M2: 0,
+                isLt2Mzip: "",
+                showUpload: false,
+                showUpload1: false,
+                showUpload2: false,
+                showUpload3: false,
+                doubleClick: true,
+                operateStatus: [],
+                car_warehouse: [],
+                auditArr: [],
+                orderModal: false,
+                czArr: [],
+                allselect: false,
+                indexsee: "",
+                loading: true,
+                department: [],
+                positionList: [],
+                fileList: [],
+                showsearch: false,
+                checkedname: [],
+                checkedids: [],
+                sendids: [],
+                pageshow: true,
+                completeids: [],
+                uncheckedids: [],
+                statusOptions: [
+                    {
+                        value: "1",
+                        label: "试用",
+                    },
+                    {
+                        value: "2",
+                        label: "在职",
+                    },
+                    {
+                        value: "3",
+                        label: "待离职",
+                    },
+                    {
+                        value: "4",
+                        label: "离职",
+                    },
+                ],
+                confirmOptions: [
+                    {
+                        value: "0",
+                        label: "未核对",
+                    },
+                    {
+                        value: "1",
+                        label: "已核对",
+                    },
+                ],
+
+                sendOptions: [
+                    {
+                        value: "0",
+                        label: "未派发",
+                    },
+                    {
+                        value: "1",
+                        label: "已派发",
+                    }
+                ],
+                completeOptions: [
+                    {
+                        value: "0",
+                        label: "未实发",
+                    },
+                    {
+                        value: "1",
+                        label: "已实发",
+                    }
+                ],
+            },
+            filters: {
+                timestampToTime: function (timestamp) {
+                    if (timestamp) {
+                        var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                        Y = date.getFullYear() + "-";
+                        M =
+                            (date.getMonth() + 1 < 10
+                                ? "0" + (date.getMonth() + 1)
+                                : date.getMonth() + 1) + "-";
+                        D =
+                            (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) +
+                            " ";
+                        h =
+                            (date.getHours() < 10
+                                ? "0" + date.getHours()
+                                : date.getHours()) + ":";
+                        m =
+                            (date.getMinutes() < 10
+                                ? "0" + date.getMinutes()
+                                : date.getMinutes()) + ":";
+                        s =
+                            date.getSeconds() < 10
+                                ? "0" + date.getSeconds()
+                                : date.getSeconds();
+                        return Y + M + D;
+                    } else {
+                        return "";
+                    }
+                },
+            },
+            computed: {},
+            watch: {
+                fullHeight: function (val) {
+                    if (!this.timer) {
+                        this.fullHeight = val;
+                        this.timer = true;
+                        let that = this;
+                        setTimeout(function () {
+                            that.timer = false;
+                        }, 400);
+                    }
+                },
+            },
+            methods: {
+                Onimport() {
+                    this.importModal = true;
+                },
+                refresh() {
+                    this.$confirm(`是否刷新`, '刷新', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '刷新成功!'
+                        });
+                        this.getList();
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        });
+                    });
+                },
+                getnewsalary() {
+                    //console.log(this.newdate)
+                    let url = `/Admin/OASalary/update_salary_by_month`;
+                    let param = {
+                        month: this.newdate
+                    };
+                    axios
+                        .post(url, Qs.stringify(param), this.config)
+                        .then((res) => {
+                            //console.log(res.data, res.data.status);
+                            if (res.data.status == 1) {
+                                this.$confirm(`是否生成工资条`, '提示', {
+                                    confirmButtonText: '确定',
+                                    cancelButtonText: '取消',
+                                    type: 'warning'
+                                }).then(() => {
+                                    this.$message({
+                                        type: 'success',
+                                        message: `${res.data.info}`
+                                    });
+                                    this.getList();
+                                }).catch(() => {
+                                    this.$message({
+                                        type: 'info',
+                                        message: '已取消'
+                                    });
+                                });
+                            }
+                            else {
+                                this.$message.error(`${res.data.info}`);
+                            }
+                        })
+                        .catch((error) => {
+                            //console.log(error);
+                        });
+
+                },
+                handleRemove(file, fileList) {
+                    //console.log(file, fileList);
+                },
+                handlePreview(file) {
+                    //console.log(file);
+                },
+                handleExceed(files, fileList) {
+                    this.$message.warning(
+                        `当前限制选择 3 个文件，本次选择了 ${files.length
+                        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+                    );
+                },
+                beforeRemove(file, fileList) {
+                    return this.$confirm(`确定移除 ${file.name}？`);
+                },
+                getnowlist() {
+                    var time = new Date();
+                    time = time.getFullYear() + '-' + (time.getMonth() + 1).toString().padStart(2, '0')
+                    //console.log('打开时候的月份')
+                    //console.log(time)
+                    this.newdate = time
+                    this.getList();
+
+                },
+                getnewlist() {
+                    //console.log("月份是")
+                    var d = new Date(this.newdate);
+                    //console.log(d)
+                    this.newdate = d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0');
+                    //console.log(this.newdate)
+                    if (this.newdate == "1970-01") {
+                        this.newdate = null
+                    }
+                    this.getList()
+                },
+                see(index, table) {
+                    this.indexsee = 1;
+                    //console.log(index);
+                    //console.log(table);
+                    this.seeItem = { ...table[index] };
+                    //console.log("*******", this.seeItem);
+                    // //console.log('当前行的数据',this.seeItem);
+                },
+                columnStyle({ row, column, rowIndex, columnIndex }) {
+                    //console.log("你以为颜色会变")
+                    // //console.log(columnIndex)
+                    if (columnIndex == 13 || columnIndex == 19 || columnIndex == 22 || columnIndex == 32 || columnIndex == 38 || columnIndex == 43 || column == 5) {   //第三第四列的背景色就改变了2和3都是列数的下标
+                        return ''
+                    }
+                },
+                btnConfirm(val) {
+                    this.$confirm('确认核对, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let url = `/Admin/OASalary/batch_confirm_salary`;
+                        let param = {
+                            ids: val,
+                        };
+                        axios
+                            .post(url, Qs.stringify(param), this.config)
+                            .then((res) => {
+                                //console.log(res)
+                                if (res.data.status == 1) {
+                                    this.getList();
+                                    //console.log(res.data.info)
+                                    this.$message({
+                                        message: '核对成功',
+                                        type: 'success'
+                                    });
+                                    // this.$confirm(`${res.data.info}`, '提示', {
+                                    //   confirmButtonText: '确定',
+                                    //   cancelButtonText: '取消',
+                                    //   type: 'warning'
+                                    // }).then(() => {
+                                    //   that.getList();
+                                    //   // 到底是哪里的问题
+                                    //   // this.multipleSelection = []
+                                    //   this.$message({
+                                    //     type: 'success',
+                                    //     message: '已确认!'
+                                    //   });
+                                    // }).catch(() => {
+                                    //   this.$message({
+                                    //     type: 'info',
+                                    //     message: '已取消'
+                                    //   });
+                                    // });
+                                }
+                                else {
+                                    // 这里需要补
+                                    this.dataList = []
+                                    this.keyname = []
+                                    this.orderModal = true
+                                    var xuhao = res.data.info;
+                                    //console.log('奇怪的数据')
+                                    for (const key in xuhao) {
+                                        this.keyname.push(key)
+                                        this.dataList.push(xuhao[key])
+                                    }
+                                }
+                            })
+                            .catch((error) => {
+                                //console.log(error);
+                            });
+
+
+                    }).catch(() => {
+                        _this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                },
+                onConfirm() {
+                    if (this.allselect == false) {
+                        that = this;
+                        // this.checkedids = []
+                        // this.multipleSelection.forEach((item, index) => {
+                        //     // 未核对的需要核对
+                        //     // this.uncheckedids.push(item.id)
+                        //     this.checkedids.push(item.id)
+                        //     //console.log(this.uncheckedids.toString())
+                        // })
+                        let url = `/Admin/OASalary/batch_confirm_salary`;
+                        let param = {
+                            ids: this.notselected.join(",")
+                        };
+                        axios
+                            .post(url, Qs.stringify(param), this.config)
+                            .then((res) => {
+                                //console.log(res)
+                                if (res.data.status == 1) {
+                                    //console.log(res.data.info)
+                                    this.$confirm(`${res.data.info}`, '提示', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        that.getList();
+                                        // 到底是哪里的问题
+                                        // this.multipleSelection = []
+                                        this.$message({
+                                            type: 'success',
+                                            message: '已确认!'
+                                        });
+                                    }).catch(() => {
+                                        this.$message({
+                                            type: 'info',
+                                            message: '已取消'
+                                        });
+                                    });
+                                }
+                                else {
+                                    this.dataList = []
+                                    this.keyname = []
+                                    var xuhao = res.data.info;
+                                    if (typeof (xuhao) == "string") {
+                                        //  alert('错了哦，这是一条错误消息');
+                                        that.$message.error(`${res.data.info}`);
+                                    }
+                                    //console.log('奇怪的数据')
+                                    else {
+                                        this.orderModal = true
+                                        for (const key in xuhao) {
+                                            this.keyname.push(key)
+                                            this.dataList.push(xuhao[key])
+                                        }
+                                    }
+                                }
+                            })
+                            .catch((error) => {
+                                //console.log(error);
+                            });
+                    }
+                    else {
+                        that = this;
+                        let url = `/Admin/OASalary/batch_confirm_salary`;
+                        let param = {
+                            ids: 'all',
+                            except_ids: this.notselected.join(","),
+                            month: this.newdate
+                                ? this.newdate
+                                : undefined
+                        };
+                        param.name = this.searchForm.name
+                            ? this.searchForm.name
+                            : undefined;
+                        param.id_card = this.searchForm.id_card
+                            ? this.searchForm.id_card
+                            : undefined;
+                        param.is_confirm = this.searchForm.confirmStatus
+                            ? this.searchForm.confirmStatus
+                            : undefined;
+                        param.is_send = this.searchForm.sendStatus
+                            ? this.searchForm.sendStatus
+                            : undefined;
+                        param.is_complete = this.searchForm.completeStatus
+                            ? this.searchForm.completeStatus
+                            : undefined;
+                        param.position_id = this.searchForm.position_id
+                            ? this.searchForm.position_id
+                            : undefined;
+                        param.department_id = this.searchForm.department_id
+                            ? this.searchForm.department_id
+                            : undefined;
+                        param.status = this.searchForm.status
+                            ? this.searchForm.status
+                            : undefined;
+                        param.entry_time_start = this.searchForm.entry_time_start
+                            ? this.searchForm.entry_time_start / 1000
+                            : undefined;
+                        param.entry_time_end = this.searchForm.entry_time_end
+                            ? this.searchForm.entry_time_end / 1000
+                            : undefined;
+                        param.leave_time_start = this.searchForm.leave_time_start
+                            ? this.searchForm.leave_time_start / 1000
+                            : undefined;
+                        param.leave_time_end = this.searchForm.leave_time_end
+                            ? this.searchForm.leave_time_end / 1000
+                            : undefined;
+                        axios
+                            .post(url, Qs.stringify(param), this.config)
+                            .then((res) => {
+                                //console.log(res)
+                                if (res.data.status == 1) {
+                                    //console.log(res.data.info)
+                                    this.$confirm(`${res.data.info}`, '提示', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        that.getList();
+                                        // 到底是哪里的问题
+                                        // this.multipleSelection = []
+                                        this.$message({
+                                            type: 'success',
+                                            message: '已确认!'
+                                        });
+                                    }).catch(() => {
+                                        this.$message({
+                                            type: 'info',
+                                            message: '已取消'
+                                        });
+                                    });
+                                }
+                                else {
+                                    this.dataList = []
+                                    this.keyname = []
+                                    var xuhao = res.data.info;
+                                    if (typeof (xuhao) == "string") {
+                                        //  alert('错了哦，这是一条错误消息');
+                                        that.$message.error(`${res.data.info}`);
+                                    }
+                                    //console.log('奇怪的数据')
+                                    else {
+                                        this.orderModal = true
+                                        for (const key in xuhao) {
+                                            this.keyname.push(key)
+                                            this.dataList.push(xuhao[key])
+                                        }
+                                    }
+
+                                }
+                            })
+                            .catch((error) => {
+                                //console.log(error);
+                            });
+                    }
+
+                },
+                btnSend(val) {
+                    this.$confirm('确认派发, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let url = `/Admin/OASalary/batch_send_salary`;
+                        let param = {
+                            ids: val,
+                        };
+                        axios
+                            .post(url, Qs.stringify(param), this.config)
+                            .then((res) => {
+                                //console.log(res)
+                                if (res.data.status == 1) {
+                                    this.getList();
+                                    //console.log(res.data.info)
+                                    this.$message({
+                                        message: '派发成功',
+                                        type: 'success'
+                                    });
+                                    // this.$confirm(`${res.data.info}`, '提示', {
+                                    //   confirmButtonText: '确定',
+                                    //   cancelButtonText: '取消',
+                                    //   type: 'warning'
+                                    // }).then(() => {
+                                    //   that.getList();
+                                    //   // 到底是哪里的问题
+                                    //   // this.multipleSelection = []
+                                    //   this.$message({
+                                    //     type: 'success',
+                                    //     message: '已确认!'
+                                    //   });
+                                    // }).catch(() => {
+                                    //   this.$message({
+                                    //     type: 'info',
+                                    //     message: '已取消'
+                                    //   });
+                                    // });
+                                }
+                                else {
+                                    // 这里需要补
+                                    this.dataList = []
+                                    this.keyname = []
+                                    this.orderModal = true
+                                    var xuhao = res.data.info;
+                                    //console.log('奇怪的数据')
+                                    for (const key in xuhao) {
+                                        this.keyname.push(key)
+                                        this.dataList.push(xuhao[key])
+                                    }
+                                }
+                            })
+                            .catch((error) => {
+                                //console.log(error);
+                            });
+
+
+                    }).catch(() => {
+                        _this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                },
+                onSend() {
+                    if (this.allselect == false) {
+                        that = this;
+                        // this.multipleSelection = [],
+                        // 如果只有一个人的情况
+                        // this.uncheckedids = [];
+                        // this.checkedcontent = [];
+                        // this.sendids = []
+                        // this.multipleSelection.forEach((item, index) => {
+                        //     // 未核对的需要核对
+                        //     //console.log(item)
+                        //     // this.uncheckedids.push(item.id)
+                        //     this.sendids.push(item.id)
+                        //     //console.log(this.uncheckedids.toString())
+                        // })
+                        let url = `/Admin/OASalary/batch_send_salary`;
+                        let param = {
+                            ids: this.notselected.join(",")
+                        };
+                        axios
+                            .post(url, Qs.stringify(param), this.config)
+                            .then((res) => {
+                                //console.log(res)
+                                if (res.data.status == 1) {
+                                    //console.log(res.data.info)
+                                    this.$confirm(`${res.data.info}`, '提示', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        that.getList();
+                                        this.$message({
+                                            type: 'success',
+                                            message: '已确认!'
+                                        });
+                                    }).catch(() => {
+                                        this.$message({
+                                            type: 'info',
+                                            message: '已取消'
+                                        });
+                                    });
+                                }
+                                else {
+                                    this.dataList = []
+                                    this.keyname = []
+                                    var xuhao = res.data.info;
+                                    if (typeof (xuhao) == "string") {
+                                        //  alert('错了哦，这是一条错误消息');
+                                        that.$message.error(`${res.data.info}`);
+                                    }
+                                    //console.log('奇怪的数据')
+                                    else {
+                                        this.orderModal = true
+                                        for (const key in xuhao) {
+                                            this.keyname.push(key)
+                                            this.dataList.push(xuhao[key])
+                                        }
+                                    }
+                                }
+
+                            })
+                            .catch((error) => {
+                                //console.log(error);
+                            });
+                    }
+                    else {
+                        that = this;
+                        let url = `/Admin/OASalary/batch_send_salary`;
+                        let param = {
+                            ids: 'all',
+                            except_ids: this.notselected.join(","),
+                            month: this.newdate
+                                ? this.newdate
+                                : undefined
+                        };
+                        param.name = this.searchForm.name
+                            ? this.searchForm.name
+                            : undefined;
+                        param.id_card = this.searchForm.id_card
+                            ? this.searchForm.id_card
+                            : undefined;
+                        param.is_confirm = this.searchForm.confirmStatus
+                            ? this.searchForm.confirmStatus
+                            : undefined;
+                        param.is_send = this.searchForm.sendStatus
+                            ? this.searchForm.sendStatus
+                            : undefined;
+                        param.is_complete = this.searchForm.completeStatus
+                            ? this.searchForm.completeStatus
+                            : undefined;
+                        param.position_id = this.searchForm.position_id
+                            ? this.searchForm.position_id
+                            : undefined;
+                        param.department_id = this.searchForm.department_id
+                            ? this.searchForm.department_id
+                            : undefined;
+                        param.status = this.searchForm.status
+                            ? this.searchForm.status
+                            : undefined;
+                        param.entry_time_start = this.searchForm.entry_time_start
+                            ? this.searchForm.entry_time_start / 1000
+                            : undefined;
+                        param.entry_time_end = this.searchForm.entry_time_end
+                            ? this.searchForm.entry_time_end / 1000
+                            : undefined;
+                        param.leave_time_start = this.searchForm.leave_time_start
+                            ? this.searchForm.leave_time_start / 1000
+                            : undefined;
+                        param.leave_time_end = this.searchForm.leave_time_end
+                            ? this.searchForm.leave_time_end / 1000
+                            : undefined;
+                        axios
+                            .post(url, Qs.stringify(param), this.config)
+                            .then((res) => {
+                                //console.log(res)
+                                if (res.data.status == 1) {
+                                    //console.log(res.data.info)
+                                    this.$confirm(`${res.data.info}`, '提示', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        that.getList();
+                                        // 到底是哪里的问题
+                                        // this.multipleSelection = []
+                                        this.$message({
+                                            type: 'success',
+                                            message: '已确认!'
+                                        });
+                                    }).catch(() => {
+                                        this.$message({
+                                            type: 'info',
+                                            message: '已取消'
+                                        });
+                                    });
+                                }
+                                else {
+                                    this.dataList = []
+                                    this.keyname = []
+                                    var xuhao = res.data.info;
+                                    if (typeof (xuhao) == "string") {
+                                        //  alert('错了哦，这是一条错误消息');
+                                        that.$message.error(`${res.data.info}`);
+                                    }
+                                    //console.log('奇怪的数据')
+                                    else {
+                                        this.orderModal = true
+                                        for (const key in xuhao) {
+                                            this.keyname.push(key)
+                                            this.dataList.push(xuhao[key])
+                                        }
+                                    }
+
+                                }
+                            })
+                            .catch((error) => {
+                                //console.log(error);
+                            });
+                    }
+
+
+                },
+                btnComplete(val) {
+                    this.$confirm('确认实发, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let url = `/Admin/OASalary/batch_complete_salary`;
+                        let param = {
+                            ids: val,
+                        };
+                        axios
+                            .post(url, Qs.stringify(param), this.config)
+                            .then((res) => {
+                                this.getList();
+                                //console.log(res)
+                                if (res.data.status == 1) {
+                                    //console.log(res.data.info)
+                                    this.$message({
+                                        message: '实发成功',
+                                        type: 'success'
+                                    });
+                                    // this.$confirm(`${res.data.info}`, '提示', {
+                                    //   confirmButtonText: '确定',
+                                    //   cancelButtonText: '取消',
+                                    //   type: 'warning'
+                                    // }).then(() => {
+                                    //   that.getList();
+                                    //   // 到底是哪里的问题
+                                    //   // this.multipleSelection = []
+                                    //   this.$message({
+                                    //     type: 'success',
+                                    //     message: '已确认!'
+                                    //   });
+                                    // }).catch(() => {
+                                    //   this.$message({
+                                    //     type: 'info',
+                                    //     message: '已取消'
+                                    //   });
+                                    // });
+                                }
+                                else {
+                                    // 这里需要补
+                                    this.dataList = []
+                                    this.keyname = []
+                                    this.orderModal = true
+                                    var xuhao = res.data.info;
+                                    //console.log('奇怪的数据')
+                                    for (const key in xuhao) {
+                                        this.keyname.push(key)
+                                        this.dataList.push(xuhao[key])
+                                    }
+                                }
+                            })
+                            .catch((error) => {
+                                //console.log(error);
+                            });
+
+
+                    }).catch(() => {
+                        _this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                },
+                changePage(e) {
+                    this.searchForm.page = e;
+                    // this.indexsee = 1;
+                    this.getList();
+                },
+
+                showmoresearch() {
+                    this.showsearch = true
+                },
+                showlesssearch() {
+                    this.showsearch = false
+                },
+
+                onComplete() {
+                    if (this.allselect == false) {
+                        that = this;
+                        // this.multipleSelection = [],
+                        // 如果只有一个人的情况
+                        // this.uncheckedids = [];
+                        // this.checkedcontent = [];
+                        // this.completeids = []
+                        // this.multipleSelection.forEach((item, index) => {
+                        //     // 未核对的需要核对
+                        //     // this.uncheckedids.push(item.id)
+                        //     this.completeids.push(item.id)
+                        //     //console.log(this.uncheckedids.toString())
+                        // })
+                        let url = `/Admin/OASalary/batch_complete_salary`;
+                        let param = {
+                            ids: this.notselected.join(",")
+                        };
+                        axios
+                            .post(url, Qs.stringify(param), this.config)
+                            .then((res) => {
+                                //console.log(res)
+                                if (res.data.status == 1) {
+                                    //console.log(res.data.info)
+                                    this.$confirm(`${res.data.info}`, '提示', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        that.getList();
+                                        this.$message({
+                                            type: 'success',
+                                            message: '已确认!'
+                                        });
+                                    }).catch(() => {
+                                        this.$message({
+                                            type: 'info',
+                                            message: '已取消'
+                                        });
+                                    });
+                                }
+                                else {
+                                    this.dataList = []
+                                    this.keyname = []
+                                    var xuhao = res.data.info;
+                                    if (typeof (xuhao) == "string") {
+                                        that.$message.error(`${res.data.info}`);
+                                    }
+                                    //console.log('奇怪的数据')
+                                    else {
+                                        this.orderModal = true
+                                        for (const key in xuhao) {
+                                            this.keyname.push(key)
+                                            this.dataList.push(xuhao[key])
+                                        }
+                                    }
+                                }
+
+                            })
+                            .catch((error) => {
+                                //console.log(error);
+                            });
+                    }
+                    else {
+                        that = this;
+                        let url = `/Admin/OASalary/batch_complete_salary`;
+                        let param = {
+                            ids: 'all',
+                            except_ids: this.notselected.join(","),
+                            month: this.newdate
+                                ? this.newdate
+                                : undefined
+                        };
+                        param.name = this.searchForm.name
+                            ? this.searchForm.name
+                            : undefined;
+                        param.id_card = this.searchForm.id_card
+                            ? this.searchForm.id_card
+                            : undefined;
+                        param.is_confirm = this.searchForm.confirmStatus
+                            ? this.searchForm.confirmStatus
+                            : undefined;
+                        param.is_send = this.searchForm.sendStatus
+                            ? this.searchForm.sendStatus
+                            : undefined;
+                        param.is_complete = this.searchForm.completeStatus
+                            ? this.searchForm.completeStatus
+                            : undefined;
+                        param.position_id = this.searchForm.position_id
+                            ? this.searchForm.position_id
+                            : undefined;
+                        param.department_id = this.searchForm.department_id
+                            ? this.searchForm.department_id
+                            : undefined;
+                        param.status = this.searchForm.status
+                            ? this.searchForm.status
+                            : undefined;
+                        param.entry_time_start = this.searchForm.entry_time_start
+                            ? this.searchForm.entry_time_start / 1000
+                            : undefined;
+                        param.entry_time_end = this.searchForm.entry_time_end
+                            ? this.searchForm.entry_time_end / 1000
+                            : undefined;
+                        param.leave_time_start = this.searchForm.leave_time_start
+                            ? this.searchForm.leave_time_start / 1000
+                            : undefined;
+                        param.leave_time_end = this.searchForm.leave_time_end
+                            ? this.searchForm.leave_time_end / 1000
+                            : undefined;
+                        axios
+                            .post(url, Qs.stringify(param), this.config)
+                            .then((res) => {
+                                //console.log(res)
+                                if (res.data.status == 1) {
+                                    //console.log(res.data.info)
+                                    this.$confirm(`${res.data.info}`, '提示', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        that.getList();
+                                        // 到底是哪里的问题
+                                        // this.multipleSelection = []
+                                        this.$message({
+                                            type: 'success',
+                                            message: '已确认!'
+                                        });
+                                    }).catch(() => {
+                                        this.$message({
+                                            type: 'info',
+                                            message: '已取消'
+                                        });
+                                    });
+                                }
+                                else {
+                                    this.dataList = []
+                                    this.keyname = []
+                                    var xuhao = res.data.info;
+                                    if (typeof (xuhao) == "string") {
+                                        //  alert('错了哦，这是一条错误消息');
+                                        that.$message.error(`${res.data.info}`);
+                                    }
+                                    //console.log('奇怪的数据')
+                                    else {
+                                        this.orderModal = true
+                                        for (const key in xuhao) {
+                                            this.keyname.push(key)
+                                            this.dataList.push(xuhao[key])
+                                        }
+                                    }
+
+                                }
+                            })
+                            .catch((error) => {
+                                //console.log(error);
+                            });
+                    }
+
+
+                },
+                handleSelect(key, keyPath) {
+                    //console.log(key, keyPath);
+                },
+                handleDelete(index, row) {
+                    _this = this;
+                    var deldata = new FormData();
+                    deldata.append("id", row[index].id);
+                    // this.$confirm(`确认删除员工${row[index].name} ?`).then((_) => {
+                    //     //console.log("shuju")
+                    //console.log(row[index].id);
+                    $.ajax({
+                        url: "/Admin/OASalary/basic_salary_del",
+                        type: "post",
+                        processData: false,
+                        // 告诉jQuery不要去设置Content-Type请求头
+                        contentType: false,
+                        data: deldata,
+                        success: function (res) {
+                            //console.log(res);
+                            _this.getList();
+                        },
+                        error: function (res) {
+                            _this.loading = false;
+                            _this.$message.error(
+                                "网络连接发生错误：" + res.status + " " + res.statusText
+                            );
+                        },
+                    });
+
+                    //     });
+                },
+                confirmStartTime(val) {
+                    if (this.endTime) {
+                        if (this.endTime < val) {
+                            this.startTime = "";
+                            return this.$message.warning("开始时间必须小于结束时间");
+                        }
+                    } else if (this.auditEnd) {
+                        if (this.auditEnd < val) {
+                            this.auditStart = "";
+                            return this.$message.warning("开始时间必须小于结束时间");
+                        }
+                    }
+                },
+                confirmEndTime(val) {
+                    if (this.startTime) {
+                        if (this.startTime > val) {
+                            this.endTime = "";
+                            return this.$message.warning("结束时间必须大于开始时间");
+                        }
+                    } else if (this.auditStart) {
+                        if (this.auditStart > val) {
+                            this.auditEnd = "";
+                            return this.$message.warning("结束时间必须大于开始时间");
+                        }
+                    }
+                },
+                payslip() {
+                    this.$confirm(`此操作会更新此${this.searchForm.month || ''}月份的所有计薪人员的工资条?`, '核对', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '确认成功!'
+                        });
+                        //console.log('111')
+                        let url = `/Admin/OASalary/update_salary_by_month`;
+                        let param = {
+                            month: this.newdate
+                                ? this.newdate
+                                : undefined
+                        };
+                        axios
+                            .post(url, Qs.stringify(param), this.config)
+                            .then((res) => {
+                                //console.log(res.data, res.data.status);
+                                if (res.data.status == 1) {
+
+                                } else if (res.status == 0) {
+
+                                }
+                            })
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        });
+                    });
+                },
+                daochu() {
+                    let url = `/admin/OASalary/dump_salary_list?id=${'0'}`
+                    if (this.searchForm.name) {
+                        url = url.concat('&name=' + this.searchForm.name)
+                    }
+                    if (this.searchForm.id_card) {
+                        url = url.concat('&id_card=' + this.searchForm.id_card)
+                    }
+                    if (this.searchForm.position_id) {
+                        url = url.concat('&position_id=' + this.searchForm.position_id)
+                    }
+                    if (this.searchForm.department_id) {
+                        url = url.concat('&department_id=' + this.searchForm.department_id)
+                    }
+                    if (this.searchForm.status) {
+                        url = url.concat('&status=' + this.searchForm.status)
+                    }
+                    if (this.searchForm.entry_time_start) {
+                        url = url.concat('&entry_time_start=' + this.entry_time_start / 1000)
+                    }
+                    if (this.searchForm.entry_time_end) {
+                        url = url.concat('&entry_time_end=' + this.searchForm.entry_time_end / 1000)
+                    }
+                    if (this.searchForm.leave_time_start) {
+                        url = url.concat('&leave_time_start=' + this.searchForm.leave_time_start / 1000)
+                    }
+                    if (this.searchForm.leave_time_end) {
+                        url = url.concat('&leave_time_end=' + this.searchForm.leave_time_end / 1000)
+                    }
+                    if (this.newdate) {
+                        url = url.concat('&month=' + this.newdate)
+                    }
+                    window.open(url, '_self');
+                },
+                getList() {
+                    //console.log("重新获取数据", this.searchForm);
+                    //console.log(this.newdate);
+                    // let _this = this;
+                    let url = `/Admin/OASalary/salary_list`;
+                    let param = {
+                        page: this.searchForm.page,
+                        month: this.newdate
+                            ? this.newdate
+                            : undefined
+                    };
+                    param.name = this.searchForm.name
+                        ? this.searchForm.name
+                        : undefined;
+                    param.department_id = this.searchForm.department_id
+                        ? this.searchForm.department_id
+                        : undefined;
+                    param.position_id = this.searchForm.position_id
+                        ? this.searchForm.level_0
+                        : undefined;
+                    param.id_card = this.searchForm.id_card
+                        ? this.searchForm.id_card
+                        : undefined;
+                    param.is_confirm = this.searchForm.confirmStatus
+                        ? this.searchForm.confirmStatus
+                        : undefined;
+                    param.is_send = this.searchForm.sendStatus
+                        ? this.searchForm.sendStatus
+                        : undefined;
+                    param.is_complete = this.searchForm.completeStatus
+                        ? this.searchForm.completeStatus
+                        : undefined;
+                    param.position_id = this.searchForm.position_id
+                        ? this.searchForm.position_id
+                        : undefined;
+                    param.department_id = this.searchForm.department_id
+                        ? this.searchForm.department_id
+                        : undefined;
+                    param.status = this.searchForm.status
+                        ? this.searchForm.status
+                        : undefined;
+                    param.entry_time_start = this.searchForm.entry_time_start
+                        ? this.searchForm.entry_time_start / 1000
+                        : undefined;
+                    param.entry_time_end = this.searchForm.entry_time_end
+                        ? this.searchForm.entry_time_end / 1000
+                        : undefined;
+                    param.leave_time_start = this.searchForm.leave_time_start
+                        ? this.searchForm.leave_time_start / 1000
+                        : undefined;
+                    param.leave_time_end = this.searchForm.leave_time_end
+                        ? this.searchForm.leave_time_end / 1000
+                        : undefined;
+                    axios
+                        .post(url, Qs.stringify(param), this.config)
+                        .then((res) => {
+                            //console.log(res.data, res.data.status);
+                            if (res.data.status == 1) {
+                                this.tableData = res.data.info.list;
+                                this.total = parseInt(res.data.info.total)
+                                this.searchForm.page = parseInt(res.data.info.page)
+                                //console.log("1111", this.tableData, res.data.info.list);
+                                //console.log(this.tableData);
+                                this.indexsee = "";
+                                this.loading = false;
+                                if (this.allselect == true) {
+                                    // console.log("this.allselect")
+                                    // console.log(this.allselect)
+                                    this.$nextTick(() => {
+                                        for (let i = 0; i < this.tableData.length; i++) {
+                                            if (this.notselected.includes(this.tableData[i].id)) {
+                                                continue;
+                                            }
+                                            this.$refs.multipleTable.toggleRowSelection(this.tableData[i], true);
+                                        }
+                                    });
+                                }
+                                else {
+                                    this.$nextTick(() => {
+                                        for (let i = 0; i < this.tableData.length; i++) {
+                                            if (this.notselected.includes(this.tableData[i].id)) {
+                                                this.$refs.multipleTable.toggleRowSelection(this.tableData[i], true);
+                                            }
+                                        }
+                                    });
+                                }
+                                // this.$nextTick(() => {
+                                //     for (let i = 0; i < this.tableData.length; i++) {  // 翻页重新勾选上
+                                //         for (let j = 0; j < this.selectedCar.length; j++) {
+                                //             if (this.tableData[i].id == this.selectedCar[j]) {
+                                //                 this.$refs.multipleTable.toggleRowSelection(this.tableData[i], true);
+                                //                 break;
+                                //             }
+                                //         }
+                                //     }
+                                // });
+                            } else if (res.status == 0) {
+                                this.tableData = [];
+                                this.total = 0;
+                            }
+                        })
+                        .catch((error) => {
+                            //console.log(error);
+                        });
+                },
+                changele: function () {
+                    // 有问题，这个数据
+                    var files = document.getElementById("exampleInputFile").files;
+                    //console.log("上传的文件");
+                    //console.log(files);
+                    //console.log(file);
+                    if (files.length) {
+                        //console.log("jinlaile");
+                        //console.log("files[0]");
+                        file.append("file", files[0]);
+                        //console.log(file);
+                    } else {
+                        file.delete("file");
+                    }
+                },
+                changekg(val) {
+                    this.addForm.deputy_director = val.curator_else;
+                    this.addForm.deputy_director_tel = val.tel_else;
+                    this.kg_tel = val.tel_else;
+                },
+                progressFile: function () {
+                    var that = this;
+                    $.ajax({
+                        url: "/Admin/OASalary/batch_update_basic_salary",
+                        data: file,
+                        type: "post",
+                        processData: false,
+                        // 告诉jQuery不要去设置Content-Type请求头
+                        contentType: false,
+                        success: function (data) {
+                            //console.log("chuguile");
+                            //console.log(file);
+                            //console.log(data);
+                            that.getList();
+                        },
+                    });
+                },
+                onSearch() {
+                    this.allselect = false
+                    this.notselected = [];
+                    this.loading = true;
+                    this.indexsee = 1;
+                    this.searchForm.page = 1
+                    this.getList();
+                    this.pageshow = false
+                    this.$nextTick(() => {
+                        this.pageshow = true
+                    })
+                    // this.currentPage =1;
+                },
+                onReset() {
+                    this.allselect = false
+                    this.notselected = [];
+                    this.searchForm.page = 1;
+                    this.searchForm.name = "";
+                    this.searchForm.id = "";
+                    this.searchForm.id_card = "";
+                    this.searchForm.position_id = "";
+                    this.searchForm.department_id = "";
+                    this.searchForm.status = "";
+                    this.searchForm.confirmStatus = "";
+                    this.searchForm.sendStatus = "";
+                    this.searchForm.completeStatus = "";
+                    this.searchForm.entry_time_start = "";
+                    this.searchForm.entry_time_end = "";
+                    this.searchForm.leave_time_start = "";
+                    this.searchForm.leave_time_end = "";
+                    this.getList();
+                    this.pageshow = false
+                    this.$nextTick(() => {
+                        this.pageshow = true
+                    })
+                },
+                // 这里获取的数据有点多，一把子数据全给你了
+                handleSelectionChange(val) {
+                    // console.log("arguments")
+                    // console.log(arguments)
+                    this.multipleSelection = val;
+                    // console.log('选择的');
+                    // console.log(this.multipleSelection);
+                },
+                singleCheckboxChange(val, row) {
+                    // this.notselected.push(arguments[1].id);
+                    // console.log("第一次")
+                    // console.log(this.notselected)
+                    for (let i = 0; i < this.notselected.length; i++) {
+                        if (this.notselected[i] == row.id) {
+                            this.notselected.splice(i, 1)
+                            console.log('循环')
+                            // 去后的
+                            console.log(this.notselected)
+                            return
+                        }
+                    }
+                    this.notselected.push(arguments[1].id);
+                    console.log("第二次")
+                    console.log(this.notselected)
+
+                },
+                allCheckboxChange(val) {
+                    // this.allselect = !this.allselect
+                    // console.log('chufa')
+                    // console.log(arguments)
+                    // console.log(arguments[0].length)
+                    // console.log(this.tableData.length)
+                    if (arguments[0].length == this.tableData.length) {
+                        this.allselect = true
+                        this.notselected = []
+                    }
+                    else { this.allselect = false }
+                },
+                clickDaily(id) {
+                    const _this = this;
+                    _this.showDaily = true;
+                    _this.dailyArr = [];
+                    $.ajax({
+                        url: "/Admin/PrePare/journal_page",
+                        type: "get",
+                        data: {
+                            detailed_id: id,
+                        },
+                        success: function (res) {
+                            if (res.status == 1) {
+                                if (res.info.journal_executive != null) {
+                                    _this.dailyArr.push(res.info.journal_executive);
+                                }
+                                if (res.info.journal_manager != null) {
+                                    _this.dailyArr.push(res.info.journal_manager);
+                                }
+                            } else {
+                                _this.$message.warning(res.info);
+                            }
+                        },
+                        error: function (res) {
+                            _this.$message.error(
+                                "网络连接发生错误：" + res.status + " " + res.statusText
+                            );
+                        },
+                    });
+                },
+                handleCurrentChange(val) {
+                    //切换页码
+                    const _this = this;
+                    _this.searchForm.page = val;
+                    _this.loading = true;
+                    _this.tableData = [];
+                    // _this.getList();
+                },
+                getArea() {
+                    //获取所在部门
+                    const _this = this;
+                    $.ajax({
+                        url: "/Admin/OAIndex/get_department_list",
+                        type: "get",
+                        success: function (data) {
+                            if (data.status == 1) {
+                                //   console.log("所在部门");
+                                //   console.log(data.info);
+                                data.info.forEach((el, i) => {
+                                    // console.log("el");
+                                    // console.log(el.name);
+                                    _this.department.push({
+                                        value: el.id,
+                                        label: el.name,
+                                    });
+                                });
+                            } else {
+                                _this.$message.warning(data.info);
+                            }
+                        },
+                        error: function (data) {
+                            _this.$message.error(
+                                "网络连接发生错误:" + data.status + " " + data.statusText
+                            );
+                        },
+                    });
+                },
+
+                getPosition() {
+                    //获取员工职位
+                    const _this = this;
+                    $.ajax({
+                        url: "/Admin/OAIndex/get_position_list",
+                        type: "get",
+                        success: function (data) {
+                            if (data.status == 1) {
+                                //   console.log("所在岗位");
+                                //   console.log(data.info);
+                                data.info.forEach((el, i) => {
+                                    // console.log("el");
+                                    // console.log(el);
+                                    _this.positionList.push({
+                                        value: el.id,
+                                        label: el.name,
+                                    });
+                                });
+                            } else {
+                                _this.$message.warning(data.info);
+                            }
+                        },
+                        error: function (data) {
+                            _this.$message.error(
+                                "网络连接发生错误:" + data.status + " " + data.statusText
+                            );
+                        },
+                    });
+                },
+                changeArea(val) {
+                    //console.log(val);
+                    //console.log(this.searchForm);
+                },
+                changeProvince(val) {
+                    this.provinceId = val;
+                    this.searchForm.city = "";
+                    if (val) {
+                        this.getCity();
+                        this.getWarehouse();
+                    }
+                },
+            },
+            created() {
+                this.getArea();
+                this.getPosition();
+                this.getnowlist();
+            },
+            mounted() {
+                const that = this;
+                window.onresize = () => {
+                    return (() => {
+                        window.fullHeight = document.documentElement.clientHeight;
+                        that.fullHeight = window.fullHeight;
+                    })();
+                };
+            },
+        });
+    </script>
+</body>
+
+</html>

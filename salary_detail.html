@@ -1,0 +1,797 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7,chrome=1" />
+  <!-- 引入样式 -->
+  <link href="__PUBLIC__/css/admin/reset.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="__PUBLIC__/css/admin/element-ui.css" />
+  <!-- <link rel="stylesheet" href="__PUBLIC__/css/admin/element_public.css" /> -->
+  <!-- 引入组件库 -->
+  <script src="__PUBLIC__/js/vue.min.js"></script>
+  <script src="__PUBLIC__/js/admin/element-ui.js"></script>
+  <script src="__PUBLIC__/js/admin/axios.min.js"></script>
+  <script src="__PUBLIC__/js/admin/qs.js"></script>
+  <script type="text/javascript" src="__PUBLIC__/js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript">
+    function getParams(name, href) {
+      var href = href || window.location.href,
+        value = "";
+      // console.log(href)
+      // console.log(name)
+
+      if (name) {
+        var reg = new RegExp(name + "=([^&]*)", "g");
+        href.replace(reg, function ($0, $1) {
+          value = decodeURI($1);
+        });
+      } else {
+        value = {};
+        var reg = /\b(\w+)=([^\/&]*)/g;
+        href.replace(reg, function ($0, $1, $2) {
+          value[$1] = decodeURI($2);
+        });
+      }
+      return value;
+    }
+    var id = getParams("id");
+    //console.log(id);
+  </script>
+  <style>
+    body {
+      overflow: hidden;
+      background-color: #fff;
+      font-family: "Helvetica Neue", Helvetica, "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    }
+
+    .el-row {
+      padding-top: 5px;
+      padding-left: 15px;
+    }
+
+    .el-table th,
+    .el-table tr {
+      font-weight: normal;
+    }
+
+    .el-table__row {
+      height: 14px !important;
+      padding-bottom: 0;
+      padding-top: 0;
+    }
+
+    .el-table_1_column_1,
+    .el-table_1_column_12,
+    .el-table_1_column_19,
+    .el-table_2_column_23,
+    .el-table_2_column_34,
+    .el-table_3_column_41 {
+      padding-bottom: 0 !important;
+      padding-top: 0 !important;
+      background-color: #a0adcc !important;
+      color: #fff !important;
+    }
+    .el-table_2_column_39.is-leaf,.el-table_2_column_40.is-leaf{
+      padding-bottom: 0 !important;
+      padding-top: 0 !important;
+      background-color: #a0adcc !important;
+      color: #fff !important;
+    }
+
+    .el-table_1_column_1 .cell,
+    .el-table_1_column_12 .cell,
+    .el-table_2_column_23 .cell,
+    .el-table_3_column_23 .cell,
+    .el-table_4_column_35 .cell,
+    .el-table_4_column_43 .cell {
+      text-align: center !important;
+    }
+
+    .color_1 {
+      /* background-color: #FF836B; */
+      border-bottom: #409eff 1px solid;
+    }
+  </style>
+</head>
+
+<body width="100%" class="ac_manage">
+  <div id="app" v-cloak>
+    <el-container>
+      <!-- 头部部分 -->
+      <!-- 主体部分 START -->
+      <div class="content-menu"></div>
+      <hr />
+      <el-main :style="'height:'+(fullHeight)+'px;'" style="padding: 0">
+        <el-scrollbar style="height: 100%">
+          <el-row class="p_20">
+            <el-row>
+
+
+              <div v-if="tableData[0]"
+                style="background-color: #2d6dd4;height: 45px;color: honeydew;font-size: 20px;line-height: 45px;text-align: center;">
+                {{tableData[0].name}}
+                -{{this.tableData[0].month.substring(0, 4)}}年{{this.tableData[0].month.substring(5, 7)}}月-工资表详情</div>
+              <div style="color: honeydew;font-size: 20px;margin-top: 5px;">
+
+              </div>
+              <div>
+
+                <a href="./salary_list.html" role="button" type="primary" style="margin-right: 20px;">
+                  <el-button>返回</el-button>
+                </a>
+                <!-- <el-button type="primary" v-if="tableData[0]&&tableData[0].is_confirm == '未核对'"
+                    style="cursor:default;background-color:#b0caf8;border: none;">未核对</el-button>
+                  <el-button type="info" v-if="tableData[0]&&tableData[0].is_confirm == '已核对'"
+                    style="cursor:default ;background-color:#b0caf8;border: none;">已核对</el-button>
+                  <el-button type="primary" v-if="tableData[0]&&tableData[0].is_send == '未派发'"
+                    style="cursor:default;background-color:#b0caf8;border: none;">未派发</el-button>
+                  <el-button type="info" v-if="tableData[0]&&tableData[0].is_send == '已派发'"
+                    style="cursor:default;background-color:#b0caf8;border: none;">已派发</el-button>
+                  <el-button type="primary" v-if="tableData[0]&&tableData[0].is_complete =='未实发'"
+                    style="cursor:default;background-color:#b0caf8;border: none;">未实发</el-button>
+                  <el-button type="info" v-if="tableData[0]&&tableData[0].is_complete =='已实发'"
+                    style="cursor:default;background-color:#b0caf8;border: none;">已实发</el-button> -->
+
+
+                <el-button type="primary">
+                  <span v-if="tableData[0]&&tableData[0].is_confirm == '未核对'" @click="Confirm()">未核对</span>
+                  <span v-if="tableData[0]&&tableData[0].is_confirm == '已核对'" style="cursor: not-allowed">已核对</span>
+                </el-button>
+                <el-button type="primary">
+                  <span v-if="tableData[0]&&tableData[0].is_send == '未派发'" @click="btnSend(id)">未派发</span>
+                  <span v-if="tableData[0]&&tableData[0].is_send == '已派发'" style="cursor: not-allowed">已派发</span>
+                </el-button>
+                <el-button type="primary">
+                  <span v-if="tableData[0]&&tableData[0].is_complete =='未实发'" @click="btnComplete(id)">未实发</span>
+                  <span v-if="tableData[0]&&tableData[0].is_complete =='已实发'" style="cursor: not-allowed">已实发</span>
+                </el-button>
+                <el-button type="primary">
+                  <span  @click="deterun">删除</span>
+                </el-button>
+              </div>
+
+              <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark"
+                style="width: 98%; margin-bottom: 28px;margin-top: 20px;float: left;"
+                :header-cell-style="{background:'#c8d5f3',color:'#3f76db'}" highlight-current-row max-height="500"
+                stripe border class="spheight">
+                <el-table-column label="基本信息" style="color:blanchedalmond !important;">
+                  <el-table-column label="工号" width="100px">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.staff_no || "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="姓名" width="78">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.name || "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="身份证号" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.id_card || "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="成本中心" show-overflow-tooltip width="100px">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.cost_enter_department || "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="一级部门" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.level_0 || "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="二级部门">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.level_1 || "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="职位">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.position || "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="入职日期" width="120px">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.entry_time }}</span>
+                    </template>
+                  </el-table-column>
+                  <!-- <el-table-column label="入职日期" width="120px">
+                    <template slot-scope="scope">
+                      <span>{{ parseInt(scope.row.entry_time)*1000 |
+                          timestampToTime }}</span>
+                    </template>
+                  </el-table-column> -->
+                  <el-table-column label="离职日期" width="120px">
+                    <template slot-scope="scope">
+                      <span>{{   scope.row.leave_time||"-"   }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="状态" show-overflow-tooltip width="75px">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.status || "-" }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column label="标准薪资">
+                  <el-table-column label="基本薪资">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].oa_basic_salary.basic_salary || ""
+                          }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="基本绩效">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].oa_basic_salary.merit_salary || ""}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="高温补贴">
+                    <template slot-scope="scope">
+                      <span>{{
+                          tableData[0].oa_basic_salary.high_temperature_subsidy
+                          }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="通讯补贴">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].oa_basic_salary.communication_subsidy
+                          }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="其他">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].oa_basic_salary.other_subsidy
+                          }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="合计">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].oa_basic_salary.all_basic_salary ||
+                          '-' }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column label="考勤信息">
+                  <el-table-column label="应出勤">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].oa_attence.full_days ||
+                          '-' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="实出勤">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].oa_attence.work_days ||
+                          '-' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="计薪天数">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].oa_attence.calc_days ||
+                          '-' }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+              </el-table>
+
+              <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark"
+                style="width: 98%; margin-bottom: 28px" :header-cell-style="{background:'#c8d5f3',color:'#3f76db'}"
+                highlight-current-row max-height="500" stripe>
+                <el-table-column label="本月薪资">
+                  <el-table-column label="基础薪资">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].this_month_salary.basic_salary ||
+                          "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="绩效基数">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].this_month_salary.actual_merit_salary|| "-"
+                          }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="最终绩效系数" width='120'>
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].this_month_salary.merit_coefficient||
+                          "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="绩效工资">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].this_month_salary.final_merit_salary|| "-"
+                          }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="提成">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].this_month_salary.all_communication }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="通讯补贴">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].this_month_salary.communication_subsidy|| "-"
+                          }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="高温补贴">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].this_month_salary.high_temperature_subsidy||
+                          "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="其他">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].this_month_salary.other_subsidy||
+                          "-" }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="全勤奖">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].this_month_salary.full_attence
+                          }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="其他应加">
+                    <template slot-scope="scope">
+                      <span>{{ tableData[0].oa_other_addition_deduction.other_addition
+                          }}</span>
+                    </template>
+                  </el-table-column>
+
+                </el-table-column>
+                <el-table-column label="薪资扣减项" align="center">
+                  <el-table-column label="社保">
+                    <template slot-scope="scope">
+                      <span>{{  tableData[0].oa_deduction.social_security || '-' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="公积金">
+                    <template slot-scope="scope">
+                      <span>{{  tableData[0].oa_deduction.provident || '-'  }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="其他应减">
+                    <template slot-scope="scope">
+                      <span>{{  tableData[0].oa_other_addition_deduction.other_deduction || '-'  }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="个人所得税" width='120'>
+                    <template slot-scope="scope">
+                      <span>{{  tableData[0].oa_deduction.personal_tax || '-'  }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+
+                <el-table-column label="本月应发">
+                  <template slot-scope="scope">
+                    <span>{{ tableData[0].this_month_salary.this_month_should_pay||
+                        "-" }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="实发工资">
+                  <template slot-scope="scope">
+                    <span>{{ tableData[0].this_month_salary.this_month_actual_pay||
+                        "-" }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark"
+                style="width: 98%; margin-bottom: 28px" :header-cell-style="{background:'#c8d5f3',color:'#3f76db'}"
+                highlight-current-row max-height="500" stripe>
+                <el-table-column label="其他信息" align="center">
+                  <el-table-column label="银行卡">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.bank_number || '-' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="工资表时间">
+                    <template slot-scope="scope">
+                      <span>{{ parseInt(scope.row.add_time)*1000 |
+                        timestampToTime   }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="核对状态">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.is_confirm || '-' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="最新核对时间">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.confirm_time || '-' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="派发状态">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.is_send || '-' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="最新派发时间">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.send_time || '-' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="实发状态">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.is_complete || '-' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="人事确认实发时间">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.complete_time || '-' }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+              </el-table>
+            </el-row>
+          </el-row>
+        </el-scrollbar>
+      </el-main>
+    </el-container>
+    <el-dialog title="提示" :visible.sync="orderModal" width='95%' :close-on-click-modal="false"
+      style='overflow: hidden;'>
+      <table class="table table-striped">
+        <thead>
+          <tr style='font-size: 20px;'>
+            <th style='font-size: 20px;width: 100px;text-align: left;'>姓名</th>
+            <th style='font-size: 20px;margin-left: 50px;'>检查信息</th>
+          </tr>
+        </thead>
+        <tbody style='font-size: 16px;'>
+          <tr v-for="(value,index) in dataList">
+            <td style='width: 100px;'>
+              {{keyname[index]}}
+            </td>
+            <td>
+              <p v-for="item in value" :key="item" style='margin-left: 50px;display: inline;'>
+                {{item.toString()}}
+              </p>
+            </td>
+            <td>&nbsp;</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="padding-right: 70px;padding-bottom: 50px;">
+        <div slot="footer" class="dialog-footer" style="float: right">
+          <el-button type="primary" @click="orderModal= false">确定</el-button>
+        </div>
+        <div slot="footer" class="dialog-footer" style="float: right; margin: 0 20px">
+          <el-button @click="orderModal = false">取消</el-button>
+        </div>
+
+      </div>
+    </el-dialog>
+  </div>
+  <script type="text/javascript">
+    var file = new FormData();
+    var formData = new FormData();
+    var vm = new Vue({
+      el: "#app",
+      data: {
+        fullHeight: document.documentElement.clientHeight, //可滚动视图高度
+        theadStyle: {
+          background: "#f5f7fa",
+          height: "30px",
+          lineHeight: "30px",
+        },
+        config: {
+          //添加请求头
+          headers: {
+            "Content-Type":
+              "application/x-www-form-urlencoded; charset=utf-8",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+        },
+        orderModal: false,
+        value2: "",
+        tableData: [],
+        dataList: [],
+        tableData_2: [],
+        tableData_3: [],
+        tableData_4: [],
+        tableData_5: [],
+        tableData_6: [],
+        is_confirm: '',
+      },
+      filters: {
+        timestampToTime: function (timestamp) {
+          if (timestamp) {
+            var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+            Y = date.getFullYear() + "-";
+            M =
+              (date.getMonth() + 1 < 10
+                ? "0" + (date.getMonth() + 1)
+                : date.getMonth() + 1) + "-";
+            D =
+              (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) +
+              " ";
+            h =
+              (date.getHours() < 10
+                ? "0" + date.getHours()
+                : date.getHours()) + ":";
+            m =
+              (date.getMinutes() < 10
+                ? "0" + date.getMinutes()
+                : date.getMinutes()) + ":";
+            s =
+              date.getSeconds() < 10
+                ? "0" + date.getSeconds()
+                : date.getSeconds();
+            return Y + M + D;
+          } else {
+            return "";
+          }
+        },
+      },
+
+      methods: {
+        deterun(){
+          this.$confirm('是否确认删除！', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(()=> {
+            let page = {
+              id: id
+            }
+            let url = `/Admin/OASalary/salary_del`
+            axios.post(url, Qs.stringify(page), this.config).then(res => {
+              if (res.data.status == 1) {
+                this.$message({
+                    message: res.data.info,
+                    type: 'success'
+                  });
+                  setTimeout(()=>{
+                    window.open(`/Admin/OASalary/salary_list`, '_self')
+                  },1000)
+              }else{
+                this.$message.error(res.data.info);
+              }
+            })
+          })
+        },
+        // btnCon() {
+        //   console.log('无反应')
+        //   console.log(id)
+        // },
+        Confirm() {
+          console.log('caotama')
+          this.$confirm('确认核对, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let url = `/Admin/OASalary/batch_confirm_salary`;
+            let param = {
+              ids: id,
+            };
+            axios
+              .post(url, Qs.stringify(param), this.config)
+              .then((res) => {
+                //console.log(res)
+                if (res.data.status == 1) {
+                  this.getList();
+                  //console.log(res.data.info)
+                  this.$message({
+                    message: '核对成功',
+                    type: 'success'
+                  });
+                  // this.$confirm(`${res.data.info}`, '提示', {
+                  //   confirmButtonText: '确定',
+                  //   cancelButtonText: '取消',
+                  //   type: 'warning'
+                  // }).then(() => {
+                  //   that.getList();
+                  //   // 到底是哪里的问题
+                  //   // this.multipleSelection = []
+                  //   this.$message({
+                  //     type: 'success',
+                  //     message: '已确认!'
+                  //   });
+                  // }).catch(() => {
+                  //   this.$message({
+                  //     type: 'info',
+                  //     message: '已取消'
+                  //   });
+                  // });
+                }
+                else {
+                  // 这里需要补
+                  this.dataList = []
+                  this.keyname = []
+                  this.orderModal = true
+                  var xuhao = res.data.info;
+                  //console.log('奇怪的数据')
+                  for (const key in xuhao) {
+                    this.keyname.push(key)
+                    this.dataList.push(xuhao[key])
+                  }
+                }
+              })
+              .catch((error) => {
+                //console.log(error);
+              });
+
+
+          }).catch(() => {
+            _this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
+        },
+        btnSend() {
+          this.$confirm('确认派发, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let url = `/Admin/OASalary/batch_send_salary`;
+            let param = {
+              ids: id,
+            };
+            axios
+              .post(url, Qs.stringify(param), this.config)
+              .then((res) => {
+                //console.log(res)
+                if (res.data.status == 1) {
+                  this.getList();
+                  //console.log(res.data.info)
+                  this.$message({
+                    message: '派发成功',
+                    type: 'success'
+                  });
+                  // this.$confirm(`${res.data.info}`, '提示', {
+                  //   confirmButtonText: '确定',
+                  //   cancelButtonText: '取消',
+                  //   type: 'warning'
+                  // }).then(() => {
+                  //   that.getList();
+                  //   // 到底是哪里的问题
+                  //   // this.multipleSelection = []
+                  //   this.$message({
+                  //     type: 'success',
+                  //     message: '已确认!'
+                  //   });
+                  // }).catch(() => {
+                  //   this.$message({
+                  //     type: 'info',
+                  //     message: '已取消'
+                  //   });
+                  // });
+                }
+                else {
+                  // 这里需要补
+                  this.dataList = []
+                  this.keyname = []
+                  this.orderModal = true
+                  var xuhao = res.data.info;
+                  //console.log('奇怪的数据')
+                  for (const key in xuhao) {
+                    this.keyname.push(key)
+                    this.dataList.push(xuhao[key])
+                  }
+                }
+              })
+              .catch((error) => {
+                //console.log(error);
+              });
+
+
+          }).catch(() => {
+            _this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
+        },
+        btnComplete() {
+          this.$confirm('确认实发, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let url = `/Admin/OASalary/batch_complete_salary`;
+            let param = {
+              ids: id,
+            };
+            axios
+              .post(url, Qs.stringify(param), this.config)
+              .then((res) => {
+                this.getList();
+                //console.log(res)
+                if (res.data.status == 1) {
+                  //console.log(res.data.info)
+                  this.$message({
+                    message: '实发成功',
+                    type: 'success'
+                  });
+                  // this.$confirm(`${res.data.info}`, '提示', {
+                  //   confirmButtonText: '确定',
+                  //   cancelButtonText: '取消',
+                  //   type: 'warning'
+                  // }).then(() => {
+                  //   that.getList();
+                  //   // 到底是哪里的问题
+                  //   // this.multipleSelection = []
+                  //   this.$message({
+                  //     type: 'success',
+                  //     message: '已确认!'
+                  //   });
+                  // }).catch(() => {
+                  //   this.$message({
+                  //     type: 'info',
+                  //     message: '已取消'
+                  //   });
+                  // });
+                }
+                else {
+                  // 这里需要补
+                  this.dataList = []
+                  this.keyname = []
+                  this.orderModal = true
+                  var xuhao = res.data.info;
+                  //console.log('奇怪的数据')
+                  for (const key in xuhao) {
+                    this.keyname.push(key)
+                    this.dataList.push(xuhao[key])
+                  }
+                }
+              })
+              .catch((error) => {
+                //console.log(error);
+              });
+
+
+          }).catch(() => {
+            _this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
+        },
+
+
+
+        getList() {
+          //console.log("重新获取数据", this.searchForm);
+          // let _this = this;
+          let url = `/Admin/OASalary/salary_detail`;
+          let param = {
+            id: id,
+          };
+          axios
+            .post(url, Qs.stringify(param), this.config)
+            .then((res) => {
+              //console.log(res.data.info[0]);
+              // {{idate.substring(0, 4)}}年{{idate.slice(5)}}月工资条</div>
+              if (res.data.status == 1) {
+                this.tableData = [res.data.info[0]];
+                //console.log(this.tableData);
+                //console.log('wocao');
+                ////console.log(this.tableData[0].month.substring(0, 4))
+              } else if (res.status == 0) {
+                // this.tableData = [];
+                // this.totalCount = 0;
+              }
+            })
+            .catch((error) => {
+              //console.log(error);
+            });
+        },
+
+
+
+
+      },
+      created() {
+        this.getList();
+      },
+    });
+  </script>
+</body>
+
+</html>
