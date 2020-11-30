@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+	<title>优车库 - 后台管理中心</title>
+	<link href="__PUBLIC__/css/admin/reset.css" rel="stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/admin/table_form.css" rel="stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/admin/combo.select.css" rel="stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/admin/style3.0.css" rel="stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/admin/carDetection.css" rel="stylesheet" type="text/css">
+	<script src="__PUBLIC__/js/vue.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/jquery-1.7.2.min.js"></script>
+	<!--日期控件开始-->
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/js/admin/jedate/jeDate-test.css">
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/js/admin/jedate/jedate.css">
+	<script type="text/javascript" src="__PUBLIC__/js/admin/jedate/jedate.min.js"></script>
+	<!--日期控件结束-->
+	<script type="text/javascript" src="__PUBLIC__/js/admin/jquery.combo.select.js"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/js/Swiper/boxImg.css">
+	<script type="text/javascript" src="__PUBLIC__/js/Swiper/boxImg.js"></script>
+	<script src="__PUBLIC__/js/admin/utility.js"></script>
+	<link rel="stylesheet" href="__PUBLIC__/css/admin/element-ui.css" />
+	<script src="__PUBLIC__/js/admin/element-ui.js"></script>
+	<style type="text/css">
+		.show_info {
+			min-width: 100px;
+		}
+
+		.new_detection .hover_pic .car_pic {
+			width: auto;
+			height: 100%;
+			max-width: 100%;
+		}
+
+		.shiwu_box.edit_box {
+			position: fixed;
+			z-index: 1000;
+			background-color: #fff;
+		}
+
+		.lock_car_box.edit_box {
+			position: fixed;
+			z-index: 9999;
+			background-color: #fff;
+		}
+
+		.lock_car_text {
+			width: 360px;
+			height: 180px;
+			margin: 0 auto;
+			padding: 20px 0;
+		}
+
+		.lock_car_text textarea {
+			width: 360px;
+			height: 150px;
+			border: 1px solid #ccc;
+			resize: none;
+		}
+
+		td.available.current {
+			background-color: #fff;
+		}
+
+		ul {}
+
+		ul li {
+			margin-bottom: 10px;
+			font-size: 16px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" class="new_detection">
+
+		<div class="nav_bar">
+			<div class="nav_bar_content">
+				<div class="type_name">
+					{{initial_inspection.type_name}}
+				</div>
+				<ul class="clear">
+					<li v-bind:Class="[navBar_index==1 ? 'active' : '', 'nav_bar_item']" @click="scroll_view(1)">
+						<span>初检信息</span></li>
+					<li v-bind:Class="[navBar_index==2 ? 'active' : '', 'nav_bar_item']" @click="scroll_view(2)">
+						<span>基础信息</span></li>
+					<li v-bind:Class="[navBar_index==3 ? 'active' : '', 'nav_bar_item']" @click="scroll_view(3)">
+						<span>检测信息</span></li>
+					<li v-bind:Class="[navBar_index==4 ? 'active' : '', 'nav_bar_item']" @click="scroll_view(4)">
+						<span>车辆影像</span></li>
+					<li v-bind:Class="[navBar_index==5 ? 'active' : '', 'nav_bar_item']" @click="scroll_view(5)">
+						<span>检测总结</span></li>
+					<li v-bind:Class="[navBar_index==6 ? 'active' : '', 'nav_bar_item']" @click="scroll_view(6)">
+						<span>维保记录</span></li>
+					<li v-bind:Class="[navBar_index==7 ? 'active' : '', 'nav_bar_item']" @click="scroll_view(7)">
+						<span>保险记录</span></li>
+				</ul>
+				<div class="slide_bar" :style="{left:(navBar_index-1)*149+'px'}">
+					<span></span>
+				</div>
+			</div>
+		</div>
+		<div class="detection_box" id="block1">
+			<div class="title">
+				<div class="f_l title_tag"></div>
+				初检信息
+				<span>初检师：{{initial_inspection.detection_name}}</span>
+			</div>
+			<div class="detection_info clear">
+				<div class="detection_item flex">
+					<div class="key">
+						车架号
+					</div>
+					<div class="value vin">
+						<div class="show_info flex"> <span>{{initial_inspection.vin}}</span>  <img class="edit_pen" src="__PUBLIC__/images/admin/icon/pen.png" @click="show_edit('vin')" /></div>
+						<div class="edit_info hide"> <input class="edit_dom" v-bind:data-value="initial_inspection.vin" type="text" v-model="initial_inspection.vin" @blur="submit_edit('vin')" /></div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						车牌号
+					</div>
+					<div class="value plate_number">
+						<div class="show_info flex"> <span>{{initial_inspection.plate_number}}</span></div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						行驶里程
+					</div>
+					<div class="value kilometre">
+						<div class="show_info flex"> <span>{{initial_inspection.kilometre}}公里</span>  <img class="edit_pen" src="__PUBLIC__/images/admin/icon/pen.png" @click="show_edit('kilometre')" /></div>
+						<div class="edit_info hide"> <input class="edit_dom" v-bind:data-value="initial_inspection.kilometre" type="text" v-model="initial_inspection.kilometre" @blur="submit_edit('kilometre')" />公里</div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						上牌时间
+					</div>
+					<div class="value license_reg_date">
+						<div class="show_info flex"> <span>{{initial_inspection.license_reg_date}}</span>  <img class="edit_pen" src="__PUBLIC__/images/admin/icon/pen.png" @click="show_edit('license_reg_date')" /></div>
+						<div class="edit_info hide"> <input id="license_reg_date" class="edit_dom" v-bind:data-value="initial_inspection.license_reg_date" type="text" v-model="initial_inspection.license_reg_date"/></div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						使用性质
+					</div>
+					<div class="value usage">
+						<div class="show_info flex"> <span>{{initial_inspection.usage | usage}}-{{initial_inspection.belong_nature_name}}</span>  <img class="edit_pen" src="__PUBLIC__/images/admin/icon/pen.png" @click="show_edit('usage')" /></div>
+						<div class="edit_info hide">
+							<select v-bind:data-value="initial_inspection.usage" class="edit_dom"  v-model="initial_inspection.usage" @blur="submit_edit('usage',0)" >
+								<option value="0">非营运</option>
+								<option value="1">营运</option>
+								<option value="2">营转非</option>
+								<option value="3">租赁</option>
+								<option value="4">出租客运</option>
+								<option value="5">预约出租客运</option>
+								<option value="6">公交客运</option>
+								<option value="7">公路客运</option>
+								<option value="8">旅游客运</option>
+								<option value="9">货运</option>
+								<option value="10">预约出租转非</option>
+								<option value="11">出租转非</option>
+								<option value="12">教练</option>
+							</select>
+							<select v-bind:data-value="initial_inspection.belong_nature" class="edit_dom"  v-model="initial_inspection.belong_nature" @blur="submit_edit('belong_nature',1)" >
+								<option value="1">公车</option>
+								<option value="2">个人车</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						钢印车架号
+					</div>
+					<div class="value">
+						{{initial_inspection.stamp_vin_name}}
+						<div class="f_r tag_box" style="position: relative;">
+							<div class="check_detail tp" v-if="initial_inspection.stamp_vin_pic">
+								<img src="__PUBLIC__/images/admin/icon/pic_tag.png" class="pic_tag" @click="maskSwiper($event,'stamp_vin_pic')" />
+							</div>
+							<div class="toggle_block pic_info">
+								<div class="hover_pic">
+									<img :src="initial_inspection.stamp_vin_pic" class="car_pic"/>
+								</div>
+								<div class="dete_des">
+									{{initial_inspection.stamp_vin_name}}
+									<span class="pic_count">1张</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						是否可提
+					</div>
+					<div class="value">
+						{{initial_inspection.is_extract_name}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						发动机/电机号字样
+					</div>
+					<div class="value">
+						<!-- {{initial_inspection.engine_status_desc)}} -->
+						{{arrt(initial_inspection.engine_status)}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						不可提原因
+					</div>
+					<div class="value extract_reason">
+						<!--<div class="show_info flex"> <span>{{initial_inspection.extract_reason}}</span>  <img src="__PUBLIC__/images/admin/icon/pen.png" @click="show_edit('extract_reason')" /></div>
+						<div class="edit_info hide"> <input class="edit_dom" v-bind:data-value="initial_inspection.extract_reason" type="text" v-model="initial_inspection.extract_reason" @blur="submit_edit('extract_reason')" /></div>-->
+						{{initial_inspection.extract_reason | void}}
+						<div class="f_r tag_box" style="position: relative;">
+							<div class="check_detail tp" v-if="initial_inspection.extract_pic1">
+								<img src="__PUBLIC__/images/admin/icon/pic_tag.png" class="pic_tag" @click="maskSwiper($event,'extract_pic')"/>
+							</div>
+							<div class="toggle_block pic_info">
+								<div class="hover_pic">
+									<img :src="initial_inspection.extract_pic1" class="car_pic" />
+								</div>
+								<div class="dete_des">
+									{{initial_inspection.extract_reason}}
+									<span class="pic_count">2张</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						提交时间
+					</div>
+					<div class="value">
+						{{initial_inspection.detection_time | void}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="detection_box" id="block2">
+			<div class="title">
+				<div class="f_l title_tag"></div>
+				基础信息
+			</div>
+			<div class="detection_info clear">
+				<div class="detection_item flex">
+					<div class="key">
+						车源ID
+					</div>
+					<div class="value">
+						{{basics.car_id}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						车库位置
+					</div>
+					<div class="value">
+						{{basics.warehouse_name}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						入库地点
+					</div>
+					<div class="value">
+						{{basics.location}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						入库时间
+					</div>
+					<div class="value">
+						{{basics.warehouse_time}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						上牌城市
+					</div>
+					<div class="value">
+						{{basics.owenership_place}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						备注说明
+					</div>
+					<div class="value">
+						{{basics.warehouse_remark}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						官方颜色
+					</div>
+					<div class="value appearance_color_offical">
+						<div class="show_info flex"> <span>{{basics.appearance_color_offical}}</span> <img
+								class="edit_pen" src="__PUBLIC__/images/admin/icon/pen.png"
+								@click="show_edit('appearance_color_offical')" /></div>
+						<div class="edit_info hide">
+							<select v-bind:data-value="basics.appearance_color_offical" class="edit_dom"
+								v-model="basics.appearance_color_offical"
+								@blur="submit_edit('appearance_color_offical')">
+								<option v-for="item in basics.color_outside_data">{{item.color}}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						出厂日期
+					</div>
+					<div class="value production_date">
+						<div class="show_info flex"> <span>{{basics.production_date}}</span> <img class="edit_pen"
+								src="__PUBLIC__/images/admin/icon/pen.png" @click="show_edit('production_date')" />
+						</div>
+						<div class="edit_info hide"> <input id="production_date" class="edit_dom"
+								v-bind:data-value="basics.production_date" type="text"
+								v-model="basics.production_date" /></div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						是否有行驶证
+					</div>
+					<div class="value">
+						{{basics.certificate_complete_name}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						发动机/电机号
+					</div>
+					<div class="value engine_number">
+						<div class="show_info flex"> <span>{{basics.engine_number}}</span> <img class="edit_pen"
+								src="__PUBLIC__/images/admin/icon/pen.png" @click="show_edit('engine_number')" /></div>
+						<div class="edit_info hide"> <input class="edit_dom" v-bind:data-value="basics.engine_number"
+								type="text" v-model="basics.engine_number" @blur="submit_edit('engine_number')" /></div>
+					</div>
+				</div>
+				<div class="detection_item flex" v-if="basics.certificate_complete_name == '有'">
+					<div class="key">
+						发证日期
+					</div>
+					<div class="value">
+						{{basics.driving_license_date}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						排放标准
+					</div>
+					<div class="value">
+						{{basics.environmental_standards}}
+					</div>
+				</div>
+				<div class="detection_item flex" v-if="basics.certificate_complete_name == '有'">
+					<div class="key">
+						过户次数
+					</div>
+					<div class="value">
+						{{basics.transfer_times}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						是否整备
+					</div>
+					<div class="value">
+						{{basics.prepare_name}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						年检标贴
+					</div>
+					<div class="value">
+						{{basics.yearly_inspection_label_name}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						年检到期
+					</div>
+					<div class="value inspection_valid_date">
+						{{basics.inspection_valid_date}}
+						<!--<div class="show_info flex"> <span>{{basics.inspection_valid_date}}</span>  <img class="edit_pen" src="__PUBLIC__/images/admin/icon/pen.png" @click="show_edit('inspection_valid_date')" /></div>
+							<div class="edit_info hide"> <input id="inspection_valid_date" class="edit_dom" v-bind:data-value="basics.inspection_valid_date" type="text" v-model="basics.inspection_valid_date"/></div>-->
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						交强险标贴
+					</div>
+					<div class="value">
+						{{basics.compulsory_insurance_label_name}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						交强到期
+					</div>
+					<div class="value insurance_valid_date">
+						{{basics.insurance_valid_date}}
+						<!--<div class="show_info flex"> <span>{{basics.insurance_valid_date}}</span>  <img class="edit_pen" src="__PUBLIC__/images/admin/icon/pen.png" @click="show_edit('insurance_valid_date')" /></div>
+							<div class="edit_info hide"> <input id="insurance_valid_date" class="edit_dom" v-bind:data-value="basics.insurance_valid_date" type="text" v-model="basics.insurance_valid_date"/></div>-->
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						录入时间
+					</div>
+					<div class="value">
+						{{basics.warehouse_operation_time}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+
+					</div>
+					<div class="value">
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="detection_box" id="block3">
+			<div class="fixed_nav" v-show="navBar_index == 3">
+				<ul>
+					<li v-for="(item,q) in detection">
+						<a href="javascript:;" v-bind:Class="{active:fixed_index==q}"
+							@click="scroll_fixed(q)">{{item.position}}</a>
+					</li>
+					<li v-if="additional">
+						<a href="javascript:;" v-bind:Class="{active:fixed_index=='6'}"
+							@click="scroll_fixed('6')">附加项</a>
+					</li>
+				</ul>
+			</div>
+			<div class="title">
+				<div class="f_l title_tag"></div>
+				检测信息
+			</div>
+			<div class="detection_info outer">
+				<div class="detec_sum" v-for="(item,key) in detection">
+					<div class="d_head">
+						<img :src="'__PUBLIC__/images/admin/icon/detection_tag_pic'+key+'.png'" class="icon_car" />
+						{{item.position}}
+						<span class="f_r sum">
+							<img src="__PUBLIC__/images/admin/icon/normal.png" class="icon_status" /> {{item.yes}}项正常,
+							<img src="__PUBLIC__/images/admin/icon/abnormal.png" class="icon_status" /> {{item.no}}项异常
+						</span>
+					</div>
+					<div class="detection_info clear" v-for="(kind,index) in item.son">
+						<div class="detection_item sub_head flex">
+							<div class="key">
+								{{index+1}}.{{kind.position}}
+							</div>
+						</div>
+						<div class="detection_item flex" v-for="detect_son in kind.son">
+							<div class="key">
+								{{detect_son.name}}
+							</div>
+							<div class="value">
+								{{detect_son.position}}
+								<div class="f_r tag_box">
+									<div class="f_r " style="position: relative;">
+										<div class="check_detail tp" v-if="detect_son.pic.length>0">
+											<img src="__PUBLIC__/images/admin/icon/pic_tag.png" class="pic_tag"
+												@click="maskSwiper($event,'detec',detect_son)" />
+										</div>
+										<div class="toggle_block pic_info" v-if="detect_son.pic.length>0">
+											<div class="hover_pic">
+												<img :src="detect_son.pic[0]" class="car_pic" />
+											</div>
+											<div class="dete_des">
+												<!--{{detect_son.defect_desc}}-->
+												<span class="pic_count">{{detect_son.pic.length}}张</span>
+											</div>
+										</div>
+									</div>
+									<div class="f_r " style="position: relative;">
+										<div class="check_detail wb" v-if="detect_son.desc">
+											<img src="__PUBLIC__/images/admin/icon/remark.png" class="remark" />
+										</div>
+										<div class="toggle_block remark_info">
+											<div>
+												{{detect_son.desc}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="detection_item flex" v-if="kind.son.length %2 == 1">
+							<div class="key">
+							</div>
+							<div class="value">
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="detec_sum" v-if="additional">
+					<div class="d_head">
+						<img src="__PUBLIC__/images/admin/icon/detection_tag_pic5.png" class="icon_car" />
+						{{additional.project}}
+						<span class="f_r sum">
+							<img src="__PUBLIC__/images/admin/icon/normal.png" class="icon_status" />
+							{{additional.yes}}项正常,
+							<img src="__PUBLIC__/images/admin/icon/abnormal.png" class="icon_status" />
+							{{additional.no}}项异常
+						</span>
+					</div>
+					<div class="detection_info clear">
+						<div class="detection_item flex" v-for="detect_son in additional.info">
+							<div class="key">
+								{{detect_son.name}}
+							</div>
+							<div class="value">
+								{{detect_son.title}}
+								<div class="f_r tag_box">
+									<div class="f_r " style="position: relative;">
+										<div class="check_detail wb" v-if="detect_son.detail">
+											<img src="__PUBLIC__/images/admin/icon/remark.png" class="remark" />
+										</div>
+										<div class="toggle_block remark_info">
+											<div>
+												{{detect_son.detail}}
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="detection_item flex" v-if="additional.info.length %2 == 1">
+							<div class="key">
+							</div>
+							<div class="value">
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="detection_box" id="block4">
+			<div class="title">
+				<div class="f_l title_tag"></div>
+				车辆影像
+			</div>
+			<div class="pic_list clear">
+				<div style="font-size: 16px;margin-bottom: 15px;margin-top: 10px;"> 车辆图片</div>
+				<div v-for="pic_type in picture">
+					<div class="pic_box" v-for="item in pic_type.pic">
+						<span class="pic_des">{{item.title}}</span>
+						<img :src="item.pic" class="car_pic" @click="maskSwiper($event,'list',pic_type.pic)"
+							onload="verticalImg(this)" />
+					</div>
+				</div>
+				<div v-if="loop_videos.length>0">
+					<div style="font-size: 16px;margin-bottom: 15px;margin-top: 10px;">车辆视频</div>
+					<div class="pic_box" v-for="item in loop_videos">
+						<span class="pic_des">{{item.title}}</span>
+						<video class="car_pic" id="video" width="49%" height="400" :src="item.pic" controls="controls"
+							autobuffer @click="play()"></video>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="detection_box" id="block5">
+			<div class="title">
+				<div class="f_l title_tag"></div>
+				检测总结
+				<span>检测师：{{test_summary.detection_name}}</span>
+			</div>
+			<div class="detection_info clear">
+				<div class="detection_item flex">
+					<div class="key">
+						车况状态
+					</div>
+					<div class="value">
+						{{initial_inspection.condition_state | void}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						大事故项
+					</div>
+					<div class="value">
+						{{initial_inspection.great_event | void}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						大事故描述
+					</div>
+					<div class="value">
+						{{initial_inspection.accident_description | void}}
+						<div class="f_r tag_box" style="position: relative;">
+							<div class="check_detail tp" v-if="initial_inspection.pic_1">
+								<img src="__PUBLIC__/images/admin/icon/pic_tag.png" class="pic_tag"
+									@click="maskSwiper($event,'accident_pic')" />
+							</div>
+							<div class="toggle_block pic_info">
+								<div class="hover_pic">
+									<img :src="initial_inspection.pic_1" class="car_pic" />
+								</div>
+								<div class="dete_des">
+									{{initial_inspection.accident_description}}
+									<span class="pic_count">3张</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+					</div>
+					<div class="value">
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						检测评分
+					</div>
+					<div class="value">
+						{{test_summary.mark}}
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						建议评级
+					</div>
+					<div class="value">
+						{{test_summary.recommended_rating}}
+						<div style="color: #409eff;padding-right: 10px;cursor:pointer" @click='show_pingji' v-if='detections.detection_level'>
+							查看报价检测评级
+						</div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						检测师评级
+					</div>
+					<div class="value detection_level">
+						<div class="show_info flex"> <span>{{test_summary.detection_level}}</span><img class="edit_pen"
+								src="__PUBLIC__/images/admin/icon/pen.png" @click="show_edit('detection_level')" />
+						</div>
+						<div class="edit_info hide">
+							<select v-bind:data-value="test_summary.detection_level" class="edit_dom"
+								v-model="test_summary.detection_level" @blur="submit_edit('detection_level')">
+								<option value="A">A</option>
+								<option value="B1">B1</option>
+								<option value="B2">B2</option>
+								<option value="C1">C1</option>
+								<option value="C2">C2</option>
+								<option value="C3">C3</option>
+								<option value="D1">D1</option>
+								<option value="D2">D2</option>
+								<option value="D3">D3</option>
+								<option value="E1">E1</option>
+								<option value="E2">E2</option>
+								<option value="F">F</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="detection_item flex">
+					<div class="key">
+						提交时间
+					</div>
+					<div class="value">
+						{{test_summary.update_time}}
+					</div>
+				</div>
+				<div class="detection_item full flex">
+					<div class="key">
+						是否检测失误
+					</div>
+					<div class="value">
+						{{test_summary.detection_error_name}}
+					</div>
+				</div>
+				<div class="detection_item full flex">
+					<div class="key" style="height: inherit;">
+						检测总结
+					</div>
+					<div class="value interior_decoration">
+						<div class="show_info" style="height: inherit;min-height: 55px;padding-top: 10px;">
+							{{test_summary.new_summary}}
+						</div>
+						<el-button type="primary" style="margin-left: 20px;margin-right: 20px;" @click='edit_sum'>编辑
+						</el-button>
+					</div>
+				</div>
+				<div class="detection_item full flex">
+					<div class="key">
+						备注
+					</div>
+					<!-- <div class="value">
+						{{test_summary.remark}}
+						<el-button type="primary" style="float: right;margin-left: 20px;margin-right: 20px;" @click='edit_beizhu'>编辑
+						</el-button>
+					</div> -->
+					<div class="value interior_decoration">
+						<div class="show_info" style="height: inherit;min-height: 55px;padding-top: 10px;">
+							{{test_summary.remark}}
+						</div>
+						<el-button type="primary" style="margin-left: 20px;margin-right: 20px;" @click='edit_beizhu'>编辑
+						</el-button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="detection_box" id="block6">
+			<div class="title">
+				<div class="f_l title_tag"></div>
+				维保记录
+			</div>
+			<div style="font-size: 16px;margin-bottom: 20px;margin-top: 10px;">
+				<span>查询时间: {{maintenance_data.time}}</span>
+				<span style="display: inline-block;margin-left: 120px;">维保次数: {{maintenance_data.num}}</span>
+			</div>
+			<div style="font-size: 16px;margin-bottom: 35px;margin-top: 10px;">
+				<span class="demonstration">年份查询：</span>
+				<el-date-picker size='small' v-model="chuxian_year" type="year" placeholder="选择年" value-format="yyyy"
+					@change='year_search_2'>
+				</el-date-picker>
+			</div>
+
+			<div>
+				<!-- <div class="container">
+						<div class="block">
+							<span class="demonstration">年</span>
+							<el-date-picker v-model="value3" type="year" placeholder="选择年">
+							</el-date-picker>
+						</div>
+					</div> -->
+				<el-table :data="maintenance_data.detail" style="width: 100%"
+					:header-cell-style="{background:'#0099ff',color:'white'}">
+					<el-table-column type="index" width="50">
+					</el-table-column>
+					<el-table-column prop="date" label="维保时间" width="180">
+					</el-table-column>
+					<el-table-column prop="mileage" label="公里数" width="180">
+					</el-table-column>
+					<el-table-column prop="type" label="维保类型">
+					</el-table-column>
+					<el-table-column prop="material" label="使用材料">
+					</el-table-column>
+					<el-table-column prop="other" label="其它说明">
+					</el-table-column>
+				</el-table>
+			</div>
+		</div>
+		<el-dialog title="修改总结" :visible.sync="dialogVisible" width="50%">
+			<el-input type="textarea" autosize placeholder="请输入内容" v-model="beifen_sum">
+			</el-input>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogVisible = false">取 消</el-button>
+				<el-button type="primary" @click="edit_sum_2">确 定</el-button>
+			</span>
+		</el-dialog>
+		<el-dialog title="修改备注" :visible.sync="dialogVisible_5" width="50%">
+			<el-input type="textarea" autosize placeholder="请输入内容" v-model="beifen_beizhu">
+			</el-input>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogVisible_5 = false">取 消</el-button>
+				<el-button type="primary" @click="edit_sum_5">确 定</el-button>
+			</span>
+		</el-dialog>
+		<el-dialog title=" 报价检测评级查看" :visible.sync="dialogVisible_7" width="30%">
+			<ul>
+				<li>检测人 :{{detections.realname || ''}}</li>
+				<li>检测时间 :{{detections.detection_time}}</li>
+				<li>检测评极 :{{detections.detection_level}}</li>
+				<li>检测总结 : <p style="display: inline-block;" v-for='item in detections.automatic_remark'>{{item}}</p>
+				</li>
+
+			</ul>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogVisible_7 = false">返回</el-button>
+			</span>
+		</el-dialog>
+		<div class="detection_box" id="block7">
+			<div class="title">
+				<div class="f_l title_tag"></div>
+				保险记录
+			</div>
+			<div style="font-size: 16px;margin-bottom: 20px;margin-top: 10px;">
+				<span>查询时间: {{insurance_data.time}}</span>
+				<span style="display: inline-block;margin-left: 120px;">保险次数: {{insurance_data.num}}</span>
+			</div>
+			<div style="font-size: 16px;margin-bottom: 35px;margin-top: 10px;">
+				<span class="demonstration">年份查询：</span>
+				<el-date-picker size='small' v-model="weibao_year" type="year" placeholder="选择年" value-format="yyyy"
+					@change='year_search'>
+				</el-date-picker>
+			</div>
+
+			<div>
+				<!-- <div class="container">
+						<div class="block">
+							<span class="demonstration">年</span>
+							<el-date-picker v-model="value3" type="year" placeholder="选择年">
+							</el-date-picker>
+						</div>
+					</div> -->
+				<el-table :data="insurance_data.detail" style="width: 100%"
+					:header-cell-style="{background:'#0099ff',color:'white'}">
+					<el-table-column type="index" width="50">
+					</el-table-column>
+					<el-table-column prop="claim_date" label="保险时间" width="180">
+					</el-table-column>
+					<el-table-column prop="repair_detail" label="修理项目" width="180">
+					</el-table-column>
+					<el-table-column prop="total_fee" label="保险金额" width="180">
+					</el-table-column>
+					<el-table-column prop="material" label="材料" >
+					</el-table-column>
+					<el-table-column prop="material_fee" label="材料金额" >
+					</el-table-column>
+					<el-table-column prop="labor_fee" label="人工金额" >
+					</el-table-column>
+					<el-table-column prop="description" label="备注" >
+					</el-table-column>
+					
+				</el-table>
+			</div>
+		</div>
+		<div class="foot_box clear" v-if="type ==0" style="width:800px">
+			<button class="f_l pass" @click="examine('1')" v-if="!again">审核通过</button>
+			<button class="f_l reject" @click="show_reject" style="margin-left:50px">驳回</button>
+			<button class="f_l lock_car" @click="show_lock_car"
+				style="margin-left:50px;background-color:#87CEFA">审核通过及锁车</button>
+		</div>
+		<div class="foot_box clear" v-if="type ==1">
+			<button class="f_l pass" @click="jianceshiwu()">检测失误</button>
+		</div>
+		<div class="edit_box n_edit_box reject_box hide">
+			<form id="reject_form" @submit.prevent="examine('2')">
+				<div class="title">
+					驳回
+					<img src="__PUBLIC__/images/admin/icon/close.png" class="n_close_model" @click="close_model">
+				</div>
+				<div class="reject_text">
+					<textarea placeholder="请输入驳回原因"></textarea>
+				</div>
+				<div class="clear" style='width: 250px;margin: 15px auto'>
+					<div class="f_l"><button class="public_btn cancel_btn" type="button"
+							style="background-color: #1e9324" @click="close_model">取消</button></div>
+					<div class="f_r"><button class="public_btn submit_btn" type="submit">确定</button></div>
+				</div>
+			</form>
+		</div>
+		<div class="edit_box n_edit_box lock_car_box hide">
+			<form id="lock_car_form" @submit.prevent="examine('3')">
+				<div class="title">
+					锁车原因
+					<img src="__PUBLIC__/images/admin/icon/close.png" class="n_close_model" @click="close_model">
+				</div>
+				<div class="lock_car_text">
+					<textarea placeholder="请输入锁车原因"></textarea>
+				</div>
+				<div class="clear" style='width: 250px;margin: 15px auto'>
+					<div class="f_l"><button class="public_btn cancel_btn" type="button"
+							style="background-color: #1e9324" @click="close_model">取消</button></div>
+					<div class="f_r"><button class="public_btn submit_btn" type="submit">确定</button></div>
+				</div>
+			</form>
+		</div>
+		<div class="edit_box n_edit_box shiwu_box hide">
+			<form id="reject_form" @submit.prevent="sub_shiwu()">
+				<div class="title">
+					温馨提示
+					<img src="__PUBLIC__/images/admin/icon/close.png" class="n_close_model" @click="close_model">
+				</div>
+				<div class="reject_text" style="height: 100px">
+					<p style="padding-bottom:15px;">是否需要重新检测当前车辆，选择“是”车辆将会返回到待检测状态</p>
+					<div>
+						<label style="margin-left: 100px"><input type="radio" name="misstake" value="1"
+								checked="checked" />是</label>
+						<label style="margin-left: 100px"><input type="radio" name="misstake" value="0" />否</label>
+					</div>
+				</div>
+				<div class="clear" style='width: 250px;margin: 15px auto'>
+					<div class="f_l"><button class="public_btn cancel_btn" type="button"
+							style="background-color: #1e9324" @click="close_model">取消</button></div>
+					<div class="f_r"><button class="public_btn submit_btn" type="submit">确定</button></div>
+				</div>
+			</form>
+		</div>
+		<div class="mask back"></div>
+		<div class="mask ms">
+			<div class="swiper-container">
+				<span class="close-mask" @click="closemask">×</span>
+				<div class="swiper-wrapper">
+					<div class="swiper-slide" v-for="(item,index) in swipertarget">
+						<div class="slide_box">
+							<img v-bind:src="item.pic" alt="">
+						</div>
+						<p>{{item.title}}</p>
+					</div>
+				</div>
+
+				<!-- 如果需要导航按钮 -->
+				<div class="swiper-button-prev"
+					style='background-image:url(__PUBLIC__/images/home/jiantou8_l.png);background-size:100% 100%;width:50px;height:120px;margin-top:-40px;'>
+				</div>
+				<div class="swiper-button-next"
+					style='background-image:url(__PUBLIC__/images/home/jiantou8_r.png);background-size:100% 100%;width:50px;height:120px;margin-top:-40px;'>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var vm = new Vue({
+			el: '#app',
+			data: {
+				beifen_sum: '',
+				beifen_beizhu: '',
+				navBar_index: 1,
+				fixed_index: 0,
+				tableData: [
+				],
+				dialogVisible: false,
+				dialogVisible_5: false,
+				dialogVisible_7: false,
+				swipertarget: [],
+				car_id: '',
+				weibao_year: '',
+				chuxian_year: '',
+				again: '',
+				color_outside_data: '',
+				maintenance_data: '',
+				copy_maintenance_data: '',
+				copy_insurance_data: '',
+				insurance_data: '',
+				basics: '',
+				initial_inspection: '',
+				detection: '',
+				detections: '',
+				additional: '',
+				picture:
+					[{
+						'pic': [
+							{ 'pic': '__PUBLIC__/images/admin/nopic.png', 'title': "内饰-1" },
+							{ 'pic': '__PUBLIC__/images/admin/nopic.png', 'title': "内饰-2" },
+							{ 'pic': '__PUBLIC__/images/admin/nopic.png', 'title': "内饰-3" },
+							{ 'pic': '__PUBLIC__/images/admin/nopic.png', 'title': "内饰-4" },
+							{ 'pic': '__PUBLIC__/images/admin/nopic.png', 'title': "内饰-5" },
+							{ 'pic': '__PUBLIC__/images/admin/nopic.png', 'title': "内饰-6" },
+						]
+					}, {
+						'pic': [
+							{ 'pic': '__PUBLIC__/images/admin/nopic.png', 'title': "行驶证-正面" },
+							{ 'pic': '__PUBLIC__/images/admin/nopic.png', 'title': "行驶证-反面" },
+						]
+					}],
+				problem_num: '',
+				test_summary: '',
+				is_detection: false,
+				type: '',
+				loop_videos: []
+			},
+			mounted: function () {
+				var that = this;
+				that.init();
+			},
+			methods: {
+				arrt(item) {
+					if (item == '0') {
+						return '--'
+					} else if (item == '1') {
+						return '正常'
+					} else if (item == '2') {
+						return '锈蚀'
+					} else if (item == '3') {
+						return '损坏'
+					} else if (item == '4') {
+						return '变形'
+					}
+				},
+				init: function () {
+					$.showPreloader();
+					var that = this;
+					jeDate("#license_reg_date", {
+						format: "YYYY-MM-DD",
+						donefun: function (e) {
+							that.initial_inspection.license_reg_date = e.val;
+							that.submit_edit('license_reg_date')
+						}
+					});
+					jeDate("#production_date", {
+						format: "YYYY-MM-DD",
+						donefun: function (e) {
+							that.basics.production_date = e.val;
+							that.submit_edit('production_date')
+						}
+					});
+					//					    jeDate("#inspection_valid_date",{
+					//					        format: "YYYY-MM-DD",
+					//					        donefun:function(e){
+					//					        	that.basics.inspection_valid_date = e.val;
+					//					        	that.submit_edit('inspection_valid_date')
+					//					        }
+					//					    });
+					//					    jeDate("#insurance_valid_date",{
+					//					        format: "YYYY-MM-DD",
+					//					        donefun:function(e){
+					//					        	that.basics.insurance_valid_date = e.val;
+					//					        	that.submit_edit('insurance_valid_date')
+					//					        }
+					//					    });
+					var arr = new Array();
+					var href = window.location.href.split('?');
+					if (href.length > 1) {
+						var arr = href[1].split("&");
+						for (var i = 0; i < arr.length; i++) {
+							var type = arr[i].split('=');
+							if (type[0] == 'again') {
+								that.again = type[1]
+							}
+							if (type[0] == 'type') {
+								that.type = type[1]
+							}
+							if (type[0] == 'car_id') {
+								that.car_id = type[1]
+							}
+						}
+					}
+					if (that.type != 0) {
+						$(".edit_pen").remove();
+					}
+					$.ajax({
+						url: "__MODULE__/CarDetection/detection4_detail",
+						data: { 'car_id': that.car_id },
+						type: "get",
+						success: function (data) {
+							// console.log(that.maintenance_data.detail)
+							if (data.status == '1') {
+								that.basics = data.info.basics;
+								that.initial_inspection = data.info.initial_inspection;
+								that.detection = data.info.detection;
+								
+								that.detections = data.info.detections || {};
+								that.additional = data.info.additional;
+								that.picture = data.info.picture;
+								that.problem_num = data.info.problem_num;
+								that.test_summary = data.info.test_summary;
+								that.maintenance_data = data.info.maintenance_data || {};
+								if (that.maintenance_data.hasOwnProperty('detail')) {
+									that.copy_maintenance_data = JSON.parse(JSON.stringify(that.maintenance_data.detail));
+								}
+								that.insurance_data = data.info.insurance_data || {};
+								// console.log(that.insurance_data.detail)
+								if (that.insurance_data.detail !== undefined) {
+									that.copy_insurance_data = JSON.parse(JSON.stringify(that.insurance_data.detail))
+								}
+								that.loop_videos = data.info.loop_videos ? data.info.loop_videos : [];
+								if (data.info.detection.length > 0) {
+									that.is_detection = true;
+								}
+								setTimeout(function () {
+									for (var i = 0; i < $(".detection_box").length; i++) {
+										var obj = $(".detection_box").eq(i).find(".value");
+										for (var j = 0; j < $(obj).length; j++) {
+											var hei = $(obj).eq(j).height();
+											if (hei > 54) {
+												$(obj).eq(j).siblings('.key').css("height", hei - 1 + "px");
+												if (j % 2 == 0) {
+													$(obj).eq(j + 1).css("height", hei + "px");
+													$(obj).eq(j + 1).siblings('.key').css("height", hei - 1 + "px");
+												} else {
+													$(obj).eq(j - 1).css("height", hei + "px")
+													$(obj).eq(j - 1).siblings('.key').css("height", hei - 1 + "px");
+												}
+											}
+										}
+									}
+								}, 100)
+								setTimeout(function () {
+									that.nav_scroll();
+								}, 1000)
+							}
+							$.hidePreloader();
+						}
+					});
+				},
+				jianceshiwu: function () {
+					var obj = $(".shiwu_box");
+					make_Middle(obj);
+					$(".shiwu_box").removeClass("hide");
+
+					$(".mask.back").show();
+
+				},
+				sub_shiwu: function () {
+					var that = this;
+					var back_url = "__MODULE__/CarDetection/car_detail5?car_id=" + that.initial_inspection.car_id + "&type=1";
+					var detection_error = $("input[name='misstake']:checked").val();
+					$.ajax({
+						url: "__MODULE__/CarDetection/renew_detection",
+						data: { 'id': that.car_id, 'detection_error': detection_error },
+						type: "post",
+						success: function (data) {
+							if (data.status == '1') {
+								$.toast(data.info);
+								window.opener.location.href = window.opener.location.href;
+								setTimeout(function () {
+									window.location.href = back_url;
+								}, 1500)
+							} else {
+								alert(data.info)
+							}
+						}
+					});
+				},
+				nav_scroll: function () {
+					var that = this;
+					var nav1_scrollH = $("#block1").offset().top;
+					var nav2_scrollH = $("#block2").offset().top;
+					var nav3_scrollH = $("#block3").offset().top;
+					var nav4_scrollH = $("#block4").offset().top;
+					var nav5_scrollH = $("#block5").offset().top;
+					var nav6_scrollH = $("#block6").offset().top;
+					var nav7_scrollH = $("#block7").offset().top;
+					if (that.is_detection) {
+						var fixed0H = $(".detec_sum").eq(0).offset().top,
+							fixed1H = $(".detec_sum").eq(1).offset().top,
+							fixed2H = $(".detec_sum").eq(2).offset().top,
+							fixed3H = $(".detec_sum").eq(3).offset().top,
+							fixed4H = $(".detec_sum").eq(4).offset().top,
+							fixed5H = $(".detec_sum").eq(5).offset().top;
+						fixed6H = $(".detec_sum").eq(6).offset().top;
+						// fixed7H = $(".detec_sum").eq(7).offset().top;
+					}
+					$(document).on('scroll', function (event) {
+						var scrollTop = $(window).scrollTop() + 124;
+						if (scrollTop > 130) {
+							$(".nav_bar").addClass("fixed");
+						} else {
+							$(".nav_bar").removeClass("fixed");
+						}
+						if (nav2_scrollH > scrollTop && scrollTop > 0) {
+							that.navBar_index = 1;
+						} else if (nav2_scrollH < scrollTop && scrollTop < nav3_scrollH) {
+							that.navBar_index = 2;
+						} else if (nav3_scrollH < scrollTop && scrollTop < nav4_scrollH) {
+							that.navBar_index = 3;
+							if (that.is_detection) {
+								if (scrollTop < fixed1H) {
+									that.fixed_index = '0'
+								} else if (fixed1H < scrollTop && scrollTop < fixed2H) {
+									that.fixed_index = '1'
+								} else if (fixed2H < scrollTop && scrollTop < fixed3H) {
+									that.fixed_index = '2'
+								} else if (fixed3H < scrollTop && scrollTop < fixed4H) {
+									that.fixed_index = '3'
+								} else if (fixed4H < scrollTop && scrollTop < fixed5H) {
+									that.fixed_index = '4'
+								} else if (fixed5H < scrollTop) {
+
+									if ($(".detec_sum").eq(6).length) {
+										if (scrollTop < $(".detec_sum").eq(6).offset().top) {
+											that.fixed_index = '5';
+										} else {
+											that.fixed_index = '6';
+										}
+									} else {
+										that.fixed_index = '5';
+									}
+								}
+							}
+						} else if (nav4_scrollH < scrollTop && scrollTop < nav5_scrollH) {
+							that.navBar_index = 4;
+						} else if (nav5_scrollH < scrollTop && scrollTop < nav6_scrollH) {
+							that.navBar_index = 5;
+						} else if (nav6_scrollH < scrollTop && scrollTop < nav7_scrollH) {
+							that.navBar_index = 6;
+						} else if (nav7_scrollH < scrollTop) {
+							that.navBar_index = 7;
+						}
+					});
+				},
+				scroll_view: function (index) {
+					var that = this;
+					var scroll = $("#block" + index + "").offset().top - 120;
+					$("html,body").animate({ scrollTop: scroll }, 300);
+				},
+				scroll_fixed: function (index) {
+					var that = this;
+					var scroll = $(".detec_sum").eq(index).offset().top - 120;
+					$("html,body").animate({ scrollTop: scroll }, 300);
+				},
+				show_reject: function () {
+					var obj = $(".reject_box");
+					make_Middle(obj);
+					$(".reject_box").removeClass("hide");
+
+					$(".mask.back").show();
+				},
+				show_lock_car: function () {
+					var obj = $(".lock_car_box");
+					make_Middle(obj);
+					$(".lock_car_box").removeClass("hide");
+
+					$(".mask.back").show();
+				},
+				year_search_2(val) {
+					console.log(val)
+					console.log(this.copy_maintenance_data)
+					this.maintenance_data.detail = JSON.parse(JSON.stringify(this.copy_maintenance_data));
+					console.log(this.maintenance_data.detail)
+					if (val !== null) {
+						var zancun = [];
+						this.maintenance_data.detail.map((item, index) => {
+							if (item.maintenance_year == val) {
+								zancun.push(this.maintenance_data.detail[index])
+								// this.maintenance_data.detail.splice(index, 1)
+								console.log(zancun)
+							}
+						})
+						this.maintenance_data.detail = zancun 
+
+					}
+				},
+				year_search(val) {
+					console.log(val)
+					this.insurance_data.detail = JSON.parse(JSON.stringify(this.copy_insurance_data));
+					if (val !== null) {
+						var zancun = [];
+						this.insurance_data.detail.map((item, index) => {
+							if (item.insurance_year == val) {
+								// this.insurance_data.detail.splice(index, 1)
+								zancun.push(this.insurance_data.detail[index])
+							}
+						})
+						this.insurance_data.detail = zancun 
+
+					}
+				},
+				play: function () {
+					var video = document.getElementById("video");
+					video.play();
+				},
+				close_model: function () {
+					$(".edit_box").addClass("hide");
+					$(".mask.back").hide();
+				},
+				show_edit: function (type) {
+					$(".value." + type + " .show_info").addClass("hide");
+					$(".value." + type + " .edit_info").removeClass("hide");
+					//$(".value."+type+" .edit_info .edit_dom").eq(0).focus();
+				},
+				submit_edit: function (type, index) {
+					var that = this;
+					var ajaxData = {};
+					ajaxData.car_id = that.initial_inspection.car_id;
+					if (type == 'appearance' || type == 'interior_decoration' || type == 'skeleton' || type == 'performance' || type == 'function' || type == 'accident') {
+						if (value.length < 5) {
+							$.toast('字数不能少于5个字.');
+							$(".value." + type + " .edit_info .edit_dom").focus()
+							return false;
+						}
+					} else if (type == 'usage' || type == 'belong_nature') {
+						var value = $(".value.usage .edit_info .edit_dom").eq(index).val();
+					} else {
+						var value = $(".value." + type + " .edit_info .edit_dom").val();
+					}
+					ajaxData[type] = value;
+
+					$.ajax({
+						url: "__MODULE__/CarDetection/update_detection4",
+						data: ajaxData,
+						type: "post",
+						success: function (data) {
+							if (data.status == '1') {
+
+							} else {
+								$.toast(data.info)
+							}
+						}
+					});
+					$(".value." + type + " .show_info").removeClass("hide");
+					$(".value." + type + " .edit_info").addClass("hide");
+				},
+				edit_sum() {
+					this.dialogVisible = true
+					this.beifen_sum = JSON.parse(JSON.stringify(this.test_summary.new_summary));
+				},
+				edit_sum_2() {
+					that = this
+					this.dialogVisible = false
+					$.ajax({
+						url: "/Admin/CarDetection/modify_summary",
+						data: { 'car_id': this.car_id, 'type': '1', 'summary': this.beifen_sum },
+						type: "post",
+						success: function (data) {
+							let bi = JSON.parse(data);
+							// console.log(data)
+							// console.log(data.status)
+							// console.log(bi)
+							// console.log(bi.status)
+							if (bi.status == '200') {
+								console.log('成功')
+								console.log(data.status)
+								that.init()
+								that.init()
+								that.$message({
+									message: `${bi.msg}`,
+									type: 'success'
+								});
+							} else {
+								that.$message({
+									message: `${bi.msg}`,
+									type: 'warning'
+								});
+							}
+						}
+					});
+					console.log('111')
+				},
+				edit_beizhu() {
+					this.dialogVisible_5 = true
+					this.beifen_beizhu = JSON.parse(JSON.stringify(this.test_summary.remark));
+				},
+				edit_sum_5() {
+					that = this
+					this.dialogVisible_5 = false
+					$.ajax({
+						url: "/Admin/CarDetection/modify_summary",
+						data: { 'car_id': this.car_id, 'type': '2', 'summary': this.beifen_beizhu },
+						type: "post",
+						success: function (data) {
+							console.log(data)
+							let ci = JSON.parse(data);
+							if (ci.status == '200') {
+								// console.log('成功')
+								// console.log(data.status)
+								that.init()
+								that.$message({
+									message: `${ci.msg}`,
+									type: 'success'
+								});
+							} else {
+								console.log(data)
+								that.$message({
+									message: `${ci.msg}`,
+									type: 'warning'
+								});
+							}
+						}
+					});
+					console.log('111')
+				},
+				show_pingji() {
+					this.dialogVisible_7 = true
+					// this.beifen_beizhu = JSON.parse(JSON.stringify(this.test_summary.remark));
+				},
+				examine: function (type) {
+					console.log(type);
+					$.showPreloader();
+					var that = this;
+					var post_data = {}, back_url;
+					post_data.car_id = that.initial_inspection.car_id;
+					if (type == 1) { //审核通过							
+						post_data.is_confirm = 1;
+						post_data.status = -1;
+						back_url = "__MODULE__/CarDetection/car_detail5?car_id=" + that.initial_inspection.car_id + "&type=1";
+					} else if (type == 2) { //驳回							
+						post_data.is_confirm = 2;
+						post_data.confirm_info = $("#reject_form textarea").val();
+						//							if(!that.again){
+						//								post_data.status = -1;
+						//							}
+						back_url = "__MODULE__/CarDetection/car_detail5?car_id=" + that.initial_inspection.car_id + "&type=2";
+					} else if (type == 3) {  //审核通过并锁车
+
+						post_data.is_confirm = 3;
+						post_data.lock_car_reason = $("#lock_car_form textarea").val();
+						back_url = "__MODULE__/CarDetection/car_detail5?car_id=" + that.initial_inspection.car_id + "&type=1";
+					}
+
+					$.ajax({
+						url: "__MODULE__/CarDetection/to_examine",
+						data: post_data,
+						type: "post",
+						success: function (data) {
+							$.hidePreloader();
+							if (data.status == '1') {
+								$(".lock_car_box").addClass("hide");
+								$.toast(data.info);
+								window.opener.location.href = window.opener.location.href;
+								setTimeout(function () {
+									window.location.href = back_url;
+								}, 1500)
+							} else {
+								alert(data.info)
+							}
+						}
+					});
+				},
+				closemask: function () {
+					$(".mask.ms").hide();
+				},
+				maskSwiper: function (event, type, item) {
+					var that = this;
+					var bb = event.currentTarget;
+					var index = $(bb).parent().index();
+					switch (type) {
+						case 'list':
+							that.swipertarget = item
+							break;
+						case 'single':
+							var arr = [];
+							arr.push(item);
+							that.swipertarget = arr;
+							break;
+						case 'detec':
+							var arr = [];
+							var pics = item.pic;
+							for (var i = 0; i < pics.length; i++) {
+								var obje = { 'pic': pics[i], 'title': item.defect_desc };
+								arr.push(obje);
+							}
+							that.swipertarget = arr;
+							break;
+						case 'stamp_vin_pic':
+							var arr = [];
+							var obje = { 'pic': that.initial_inspection.stamp_vin_pic, 'title': that.initial_inspection.stamp_vin_name };
+							arr.push(obje);
+							that.swipertarget = arr;
+							break;
+						case 'accident_pic':
+							var arr = [];
+							var obj1 = {}, obj2 = {}, obj3 = {};
+							obj1.pic = that.initial_inspection.pic_1;
+							obj1.title = '';
+							obj2.pic = that.initial_inspection.pic_2;
+							obj2.title = '';
+							obj3.pic = that.initial_inspection.pic_3;
+							obj3.title = '';
+							arr.push(obj1);
+							arr.push(obj2);
+							arr.push(obj3);
+							that.swipertarget = arr;
+							break;
+						case 'extract_pic':
+							var arr = [];
+							var obj1 = {}, obj2 = {};
+							obj1.pic = that.initial_inspection.extract_pic1;
+							obj1.title = '';
+							obj2.pic = that.initial_inspection.extract_pic2;
+							obj2.title = '';
+							arr.push(obj1);
+							arr.push(obj2);
+							that.swipertarget = arr;
+							break;
+					}
+					//						setTimeout(function(){	
+					//							var mySwiper = new Swiper ('.swiper-container', {
+					//								prevButton:'.swiper-button-prev',
+					//								nextButton:'.swiper-button-next',
+					//								initialSlide:index,
+					//								simulateTouch:false,
+					//							}); 
+					//							that.vetical();
+					//							$(".imgZoom").imgZoom();
+					//						},200);
+					//						$(".mask.ms").show();	
+					//						$(".swiper-wrapper").css("transform","translate3d(0px, 0px, 0px)")	
+					pictureViewer(that.swipertarget, index)
+				},
+				vetical: function () {
+					var swipers = $(".swiper-slide");
+					var body_width = $(".slide_box").width();
+					var body_height = $(".slide_box").height();
+					//$('.swiper-wrapper').css("transform",'translate3d(0px, 0px, 0px)')
+					for (var i = 0; i < swipers.length; i++) {
+						swipers.eq(i).find("img").css("height", "100%");
+						swipers.eq(i).find("img").css("width", "auto");
+						var picwidth = swipers.eq(i).find("img").width();
+						var picheight = swipers.eq(i).find("img").height();
+						var left = (body_width - picwidth) / 2;
+						var top = (body_height - picheight) / 2;
+						swipers.eq(i).find("img").css({ "left": left + "px", "top": top + "px" });
+					}
+				}
+			},
+			filters: {
+				timestampToTime: function (timestamp) {
+					var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+					Y = date.getFullYear() + '-';
+					M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+					D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
+					h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+					m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+					s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+					return Y + M + D + h + m + s;
+				},
+				usage: function (status) {
+					switch (status) {
+						case '0':
+							return '非营运'
+							break;
+						case '1':
+							return '营运'
+							break;
+						case '2':
+							return '营转非'
+							break;
+						case '3':
+							return '租赁'
+							break;
+						case '4':
+							return '出租客运'
+							break;
+						case '5':
+							return '预约出租客运'
+							break;
+						case '6':
+							return '公交客运'
+							break;
+						case '7':
+							return '公路客运'
+							break;
+						case '8':
+							return '旅游客运'
+							break;
+						case '9':
+							return '货运'
+							break;
+						case '10':
+							return '预约出租转非'
+							break;
+						case '11':
+							return '出租转非'
+							break;
+						case '12':
+							return '教练'
+							break;
+					}
+				},
+				void: function (info) {
+					if (!info) {
+						return '--'
+					} else {
+						return info
+					}
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

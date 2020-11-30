@@ -1,0 +1,1567 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="__PUBLIC__/css/admin/reset.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/admin/element-ui.css" />
+    <script src="__PUBLIC__/js/vue.min.js"></script>
+    <script src="__PUBLIC__/js/admin/element-ui.js"></script>
+    <script src="__PUBLIC__/js/admin/axios.min.js"></script>
+    <script src="__PUBLIC__/js/admin/qs.js"></script>
+    <script src="/Public/js/jquery-1.12.4.min.js"></script>
+    <style>
+        body {
+            padding-bottom: 100px;
+            padding-right: 0 !important;
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC",
+                "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            background-color: white;
+        }
+
+
+
+        .container {
+            background: url(__PUBLIC__/images/admin/detection_back.png);
+            background-size: 258px;
+        }
+
+        header {
+            width: 100%;
+            margin: 0;
+            height: 35px;
+            background: url(__PUBLIC__/images/admin/admin_img/macos/imgxh.png) no-repeat;
+            background-size: 100%;
+            filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='__PUBLIC__/images/admin/admin_img/macos/imgxh.png', sizingMethod='scale')\9;
+        }
+
+        .main-logo {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .main-logo__text {
+            font-size: 25px;
+            color: #A1C3EB;
+            font-family: PingFangSC-Regular;
+        }
+
+        .main-logo__img {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .main-logo__img img {
+            height: 65px;
+        }
+
+        .main-title {
+            color: #333333;
+            width: 100%;
+            font-size: 32px;
+            font-family: PingFangSC-Regular;
+            font-weight: bold;
+            margin: 30px auto 20px auto;
+            text-align: center;
+        }
+
+        .main-testTime {
+            font-size: 16px;
+            color: #999999;
+            font-family: PingFangSC-Regular;
+        }
+
+        .main-baseInfo {
+            position: relative;
+            border: 1px solid #A1C3EB;
+            padding: 30px 15px 10px 15px;
+            margin-bottom: 30px;
+        }
+
+        .main-baseInfo .main-baseInfo__detail p {
+            font-size: 16px;
+            color: #333333;
+            /* overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; */
+        }
+
+        .main-baseInfo-left {
+            width: 435px;
+            height: 275px;
+            /* overflow: hidden; */
+            /* 新加 */
+            display: inline-block;
+        }
+
+        .main-baseInfo-left img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .main-baseInfo-mid p {
+            margin-bottom: 5px;
+            font-size: 17px;
+            /* width: 280px; */
+        }
+
+        .main-baseInfo-right {
+            width: 240px;
+            height: 240px;
+            /* display: inline-block; */
+            float: right;
+            /* background: url(/Public/images/admin/admin_img/macos/img4xh.png);
+            background-size: 100% 100%; */
+            background: url(/Public/images/admin/admin_img/macos/img4xh.png) no-repeat center center;
+            background-size: 100% 100%;
+            /*针对IE8*/
+            background: none\9;
+            filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/Public/images/admin/admin_img/macos/img4xh.png', sizingMethod='scale'\9);
+            color: #795548;
+            font-size: 55px;
+            font-family: PingFangSC-Regular;
+            text-align: center;
+            line-height: 210px;
+            margin-right: 20px;
+            margin-left: 150px;
+            /* 新加 */
+            overflow: hidden;
+        }
+
+        .jc-des {
+            font-size: 16px;
+            color: #333333;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .main-baseInfo__title {
+            text-align: center;
+            color: white;
+            width: 110px;
+            display: inline-block;
+            position: absolute;
+            top: -20px;
+            left: -1px;
+            font-size: 18px;
+            padding: 6px 0;
+            background: url(__PUBLIC__/images/admin/admin_img/macos/img1xh.png);
+            background-size: 100% 100%;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        footer .footer-logo img {
+            width: 160px;
+            height: 49px;
+        }
+
+        .footer-text {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .footer-tel {
+            color: #999999;
+            font-size: 44px;
+            text-align: left;
+            font-family: PingFangSC-Regular;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        .footer-bg {
+            width: 100%;
+            margin: 0px;
+            height: 35px;
+            background: url(__PUBLIC__/images/admin/admin_img/macos/imgxh.png) no-repeat;
+            background-size: 100%;
+            margin-top: 50px;
+            transform: scaleY(-1);
+            filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='__PUBLIC__/images/admin/admin_img/macos/imgxh.png', sizingMethod='scale'\9);
+        }
+
+        .jc-info {
+            /* border-bottom: none; */
+            padding: 0 !important;
+            min-height: 40px;
+        }
+
+        .jc-info__content {
+            margin-bottom: 0;
+        }
+
+        .jc-info__content li {
+            list-style: none;
+            border-bottom: 1px solid #A1C3EB;
+            overflow: hidden;
+            /* position: relative; */
+            display: -moz-box;
+            /* Firefox */
+            display: -ms-flexbox;
+            /* IE10 */
+            display: -webkit-box;
+            /* Safari */
+            display: -webkit-flex;
+            /* Chrome, WebKit */
+            display: box;
+            display: flexbox;
+            display: flex;
+            align-items: center;
+        }
+
+        .jc-info__content li:last-child {
+            border-bottom: none;
+        }
+
+        .jc-info__content li img {
+            width: 100%;
+            height: 100%;
+            max-width: 350px;
+        }
+
+        .jc-info__left {
+            border-right: 1px solid #A1C3EB;
+            padding: 25px 20px;
+            width: 33.3%;
+        }
+
+        .jc-info__right {
+            padding: 20px;
+            width: 56.6%;
+        }
+
+        .inlineBlock {
+            display: inline-block;
+            width: 50%;
+        }
+
+        .consxl {
+            border-right: solid #ACC0D8 1px;
+            display: inline-block;
+            padding-right: 10px;
+            color: #333333;
+            font-size: 26px;
+            font-family: PingFang-SC-Regular;
+            width: 168px;
+            line-height: 48px;
+        }
+
+        .itd_li_span {
+            color: #999999;
+            font-size: 20px;
+            text-align: left;
+            padding-left: 10px;
+            line-height: 48px;
+        }
+
+        .itd_li_span_n1 {
+            position: absolute;
+            right: 50px;
+        }
+
+        .itd_li_p {
+            color: #A1C3EB;
+            font-size: 16px;
+            text-align: left;
+            font-family: PingFang-SC-Regular;
+            margin: 10px 0;
+        }
+
+        .img-box img {
+            width: 100%;
+            height: 368px;
+        }
+
+        .img-text {
+            background: #333333;
+            color: #fff;
+            padding: 10px;
+            margin: 20px 0;
+        }
+
+        .title-icon {
+            color: #A1C3EB;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .title-icon img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+
+        }
+
+        .clear:after {
+            content: " ";
+            display: block;
+            clear: both;
+            height: 0;
+        }
+
+        .clear {
+            zoom: 1;
+        }
+
+        .img-box {
+            width: 48.4%;
+            margin-left: 15px;
+        }
+
+        .over_h {
+            display: block;
+            max-width: 290px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .img-thumbnail {
+            display: inline-block;
+            max-width: 100%;
+            height: auto;
+            padding: 4px;
+            line-height: 1.42857143;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            -webkit-transition: all .2s ease-in-out;
+            -o-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+        }
+
+        .pull-left {
+            float: left !important;
+        }
+
+        p {
+            margin: 0 0 10px;
+        }
+
+        .zhushitu {
+            position: relative;
+            width: 340px;
+        }
+
+        .zhutu {
+            width: 100%;
+        }
+
+        .back437 {
+            /* 107 */
+            /* top: 95px;
+      left: 86px; */
+            top: calc(190px/2);
+            left: calc(172px/2);
+            width: 140px;
+            height: 90px;
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: -154px -128px;
+        }
+
+        .back_1 {
+            background-image: url('__PUBLIC__/images/admin/follow_car/ban_jin.png')
+        }
+
+
+        .back_3 {
+            background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png')
+        }
+
+
+
+        .back239 {
+            /* 60 */
+            left: calc(176px/2);
+            top: calc(195px/2);
+            width: 36px;
+            height: 62.5px;
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-217px/2) calc(-270px/2);
+        }
+
+
+        .back115 {
+            /* 34 */
+            left: calc(388px/2);
+            top: calc(188px/2);
+            width: 35px;
+            height: 72px;
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-592px/2) calc(-260px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back418 {
+            /* 103 */
+            left: calc(428px/2);
+            top: calc(65px/2);
+            width: calc(200px/2);
+            height: calc(120px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-620px/2) calc(-104px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back312 {
+            /* 81 */
+            left: calc(35px/2);
+            top: calc(176px/2);
+            width: 16px;
+            height: 99px;
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-61px/2) calc(-254px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+
+        .back302 {
+            /* 79 */
+            left: calc(84px/2);
+            top: calc(177px/2);
+            width: calc(32px/2);
+            height: calc(32px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-112px/2) calc(-252px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+
+        .back307 {
+            /* 80 */
+            left: calc(84px/2);
+            top: calc(315px/2);
+            width: calc(32px/2);
+            height: calc(32px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-112px/2) calc(-394px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back18 {
+            /* 60 */
+            left: calc(129px/2);
+            top: calc(187px/2);
+            width: calc(65px/2);
+            height: calc(170px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-140px/2) calc(-260px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back105 {
+            /* 33 */
+            left: calc(440px/2);
+            top: calc(184px/2);
+            width: calc(142px/2);
+            height: calc(151px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-660px/2) calc(-260px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back328 {
+            /* 84 */
+            left: calc(119px/2);
+            top: calc(58px/2);
+            width: calc(170px/2);
+            height: calc(70px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-182px/2) calc(-89px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back350 {
+            /* 89 */
+            left: calc(220px/2);
+            top: calc(60px/2);
+            width: calc(127px/2);
+            height: calc(67px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-354px/2) calc(-98px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back384 {
+            /* 96 */
+            left: calc(342px/2);
+            top: calc(60px/2);
+            width: calc(100px/2);
+            height: calc(67px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-500px/2) calc(-98px/2);
+        }
+
+        .back12 {
+            /* 96 */
+            left: calc(428px/2);
+            top: calc(60px/2);
+            width: calc(150px/2);
+            height: calc(67px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-621px/2) calc(-98px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back93 {
+            /* 31 */
+            left: calc(588px/2);
+            top: calc(177px/2);
+            width: calc(30px/2);
+            height: calc(35px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-828px/2) calc(-256px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back407 {
+            /* 100 */
+            left: calc(402.5px/2);
+            top: calc(164px/2);
+            width: calc(35px/2);
+            height: calc(35px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-688px/2) calc(-223px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back99 {
+            /* 32 */
+            left: calc(585px/2);
+            top: calc(311px/2);
+            width: calc(23px/2);
+            height: calc(40px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-826px/2) calc(-402px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back76 {
+            /* 27 */
+            left: calc(590px/2);
+            top: calc(173px/2);
+            width: calc(60px/2);
+            height: calc(181px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-872px/2) calc(-260px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back359 {
+            /* 90 */
+            left: calc(240px/2);
+            top: calc(95px/2);
+            width: calc(30px/2);
+            height: calc(20px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-418px/2) calc(-87px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back381 {
+            /* 95 */
+            left: calc(322px/2);
+            top: calc(123px/2);
+            width: calc(110px/2);
+            height: calc(40px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-495px/2) calc(-177px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back90 {
+            /* 30 */
+            left: calc(621.5px/2);
+            top: calc(190px/2);
+            width: calc(15px/2);
+            height: calc(139px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-945px/2) calc(-274px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back219 {
+            /* 56 */
+            left: calc(122px/2);
+            top: calc(400px/2);
+            width: calc(153px/2);
+            height: calc(88px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-162px/2) calc(-491px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back347 {
+            /* 88 */
+            left: calc(221px/2);
+            top: calc(123.5px/2);
+            width: calc(113px/2);
+            height: calc(50px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-360px/2) calc(-180px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back188 {
+            /* 50 */
+            left: calc(229px/2);
+            top: calc(404px/2);
+            width: calc(120px/2);
+            height: calc(60px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-335px/2) calc(-488px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back153 {
+            /* 43 */
+            left: calc(338px/2);
+            top: calc(404.5px/2);
+            width: calc(105px/2);
+            height: calc(61px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-469px/2) calc(-493px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back128 {
+            /* 37  */
+            left: calc(430px/2);
+            top: calc(403px/2);
+            width: calc(153px/2);
+            height: calc(64px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-589px/2) calc(-493px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back185 {
+            /* 49  */
+            left: calc(225px/2);
+            top: calc(364px/2);
+            width: calc(100px/2);
+            height: calc(40px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-326px/2) calc(-436px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back243 {
+            /* 61  */
+            left: calc(129px/2);
+            top: calc(187px/2);
+            width: calc(55px/2);
+            height: calc(157px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-140px/2) calc(-266px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back258 {
+            /* 63  */
+            left: calc(129px/2);
+            top: calc(187px/2);
+            width: calc(55px/2);
+            height: calc(157px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-140px/2) calc(-266px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back150 {
+            /* 42  */
+            left: calc(330px/2);
+            top: calc(366px/2);
+            width: calc(100px/2);
+            height: calc(40px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-463px/2) calc(-439px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back393 {
+            /* 97  */
+            left: calc(347px/2);
+            top: calc(95px/2);
+            width: calc(30px/2);
+            height: calc(20px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-517px/2) calc(-86px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back197 {
+            /* 51 */
+            left: calc(234px/2);
+            top: calc(406px/2);
+            width: calc(40px/2);
+            height: calc(40px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-384px/2) calc(-570px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back162 {
+            /* 44 */
+            left: calc(338px/2);
+            top: calc(403px/2);
+            width: calc(40px/2);
+            height: calc(30px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-480px/2) calc(-570px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+        .back147 {
+            /* 41 */
+            left: calc(402px/2);
+            top: calc(338px/2);
+            width: calc(30px/2);
+            height: calc(30px/2);
+            position: absolute;
+            background-size: 500px 325px;
+            background-position: calc(-709px/2) calc(-426px/2);
+            /* background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png') */
+        }
+
+
+        .gu_jia {
+            width: calc(1023px/3);
+            height: calc(780px/3);
+            position: relative;
+        }
+
+        .back11 {
+            /* 5 */
+            border-radius: 50%;
+            left: 15%;
+            top: 58%;
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back21 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.2493*100%);
+            top: calc(0.7212*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back23 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.1026*100%);
+            top: calc(0.5769*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back25 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.3959*100%);
+            top: calc(0.6519*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back27 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.195*100%);
+            top: calc(0.5135*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back35 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.4252*100%);
+            top: calc(0.5577*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back39 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.1466*100%);
+            top: calc(0.4327*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back43 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.4897*100%);
+            top: calc(0.6577*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back45 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.2141*100%);
+            top: calc(0.4423*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+
+        .back47 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.3739*100%);
+            top: calc(0.4519*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back84 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.0953*100%);
+            top: calc(0.7212*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back87 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0);
+            top: calc(0);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back170 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.3152*100%);
+            top: calc(0.2981*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back177 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.4795*100%);
+            top: calc(0.3635*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back183 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.4985*100%);
+            top: calc(0.1827*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back205 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.5938*100%);
+            top: calc(0.2115*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back211 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.5132*100%);
+            top: calc(0.4365*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back264 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.9091*100%);
+            top: calc(0.3077*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back268 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.7155*100%);
+            top: calc(0.3327*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back270 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.9384*100%);
+            top: calc(0.7212*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back21 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.2493*100%);
+            top: calc(0.7212*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back21 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.2493*100%);
+            top: calc(0.7212*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back21 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.2493*100%);
+            top: calc(0.7212*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+        .back21 {
+            /* 7 */
+            border-radius: 50%;
+            left: calc(0.2493*100%);
+            top: calc(0.7212*100%);
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            background-color: red;
+        }
+
+
+
+
+
+        /* .back4 {
+      /* 81 */
+        /* left: calc(35px/2);
+      top: calc(178px/2);
+      width: 16px;
+      height: 99px;
+      position: absolute;
+      background-size: 500px 325px;
+      background-position: calc(-61px/2) calc(-254px/2);
+      background-image: url('__PUBLIC__/images/admin/follow_car/geng_huan.png')
+    } */
+
+        /* .back4 {
+      远点
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      top: 110px;
+      left: 105px;
+      position: absolute;
+    } */
+
+
+        .back_waiguan_2 {
+            background-color:#ffc000;
+
+        }
+       
+
+        .back_waiguan_4 {
+            background-color: #ff0000;
+
+        }
+
+        .back_guding_1 {
+            background-color: #b4c7e7;
+            border-radius: 50%;
+        }
+
+        .back_guding_2 {
+            background-color: #f4b184;
+            border-radius: 50%;
+
+        }
+
+        .back_guding_3 {
+            background-color: #f17866;
+            border-radius: 50%;
+
+        }
+
+        .back_guding_4 {
+            background-color: #ff0000;
+            border-radius: 50%;
+
+        }
+    </style>
+
+</head>
+
+<body width="100%" class="ac_manage">
+    <div id="app" v-cloak>
+        <div class="container" style="width: 1040px;margin: 0 auto;">
+            <header></header>
+            <main>
+                <!-- logo -->
+                <div class="main-logo">
+                    <p class="main-logo__text">二手车检测报告</p>
+                    <div class="main-logo__img">
+                        <img src="__PUBLIC__/images/home/logo-1.png" alt="">
+                    </div>
+                </div>
+                <!-- 标题  -->
+                <div class="main-title">
+                    <!-- 奇瑞eQ1 2017款 智享版 2座 -->
+                </div>
+                <div style="display: flex;font-size: 16px;
+                color: #999999;font-family: PingFangSC-Regular;margin-bottom: 30px;">
+                    <div style="width: 30%;">检测编号：{{reportData.info.basic_information.detection_number}}</div>
+                    <div style="width: 30%;">检测时间：{{reportData.info.basic_information.detection_time}}</div>
+                    <div>检测公司：{{reportData.info.basic_information.detection_company}}</div>
+                </div>
+                <div class="main-baseInfo">
+                    <p class="main-baseInfo__title">综合评定</p>
+                    <div style="width: 100%;height: 255px;;font-size: 16px;margin-left: 20px;">
+                        <div class="main-baseInfo-right"></div>
+                        <div style='margin-bottom: 5px;padding-top: 32px;'>车况描述:
+                            {{reportData.info.car_summary.description}}</div>
+                        <div style='margin-bottom: 5px'> 总结：{{reportData.info.car_summary.summary
+
+                        }}</div>
+                    </div>
+                </div>
+                <!-- 基本信息 -->
+                <div class="main-baseInfo">
+                    <p class="main-baseInfo__title">基本信息</p>
+                    <div class="main-baseInfo__detail clear">
+                        <!-- <div class="main-baseInfo-left pull-left">
+              <img src="" alt="基本信息图片" class="img-thumbnail">
+            </div> -->
+                        <div class="main-baseInfo-mid" style="margin-left: 15px;"> </div>
+                        <!-- <div class="main-baseInfo-right pull-left"></div> -->
+                    </div>
+                </div>
+                <!-- 车辆档案 -->
+                <div class="main-baseInfo">
+                    <p class="main-baseInfo__title">车辆档案</p>
+                    <div class="main-baseInfo__detail">
+                        <div class="clear car-files"></div>
+                    </div>
+                </div>
+                <!-- 事故检测 -->
+                <div class="main-baseInfo">
+                    <p class="main-baseInfo__title">事故检测</p>
+                    <div class="main-baseInfo__detail sg-detail"> </div>
+                </div>
+                <!-- 检测总结 -->
+
+                <!-- 车况检测 -->
+                <div class="main-baseInfo jc-info">
+                    <p class="main-baseInfo__title">车况检测</p>
+                    <!-- <div style="width: 100%;background-color: violet;height: 300px;"> -->
+                    <div style="width: 100%;height: 300px;border-bottom: 1px solid #a1c3eb;">
+                        <div
+                            style="width: 20%;height: 300px;float: left; text-align:center; line-height:300px;border-right: 1px solid #a1c3eb;;">
+                            <p style="font-size: 16px;">外观</p>
+                        </div>
+                        <div style="width: 45%;height: 300px;float: left;padding-left: 80px;">
+                            <!-- <img src="__PUBLIC__/images/admin/follow_car/wai_guan.png" alt="" style="width: 340px;" > -->
+                            <div class="zhushitu">
+                                <img src="__PUBLIC__/images/admin/follow_car/wai_guan.png" alt="" class="zhutu">
+                                <div v-for="item in wai_guan" v-if='item.color_type==1'
+                                    :class="['back'+item.id, 'back_'+item.color_type]"></div>
+                                <div v-for="item in wai_guan" v-if='item.color_type==3'
+                                    :class="['back'+item.id, 'back_'+item.color_type]"></div>
+                                <div v-for="item in wai_guan" v-if='item.color_type==2||item.color_type==4'
+                                    :class="['back_waiguan_'+item.color_type]" :style="{
+                                            'border-radius': '50%',
+                                            'left':(item.coordinate_x * 100+'%') ,
+                                            'top': (item.coordinate_y * 100+'%'),
+                                            'width': '10px',
+                                            'height': '10px',
+                                            'position': 'absolute'
+                                            }"></div>
+                                           
+                            </div>
+                            <div style="display: flex;width: 300px;justify-content: space-between;line-height: 15px;height: 15px;">
+                                <div style="width: 15px;height: 15px;border-radius: 50%;background-color: #b4c6e7;"></div>普通喷漆
+                                <div style="width: 15px;height: 15px;border-radius: 50%;background-color: #ffc000;"></div>可见伤
+                                <div style="width: 15px;height: 15px;border-radius: 50%;background-color: #f4b183;"></div>钣金修复
+                                <div style="width: 15px;height: 15px;border-radius: 50%;background-color: #f43308;"></div>更换
+                            </div>
+                        </div>
+                        <div
+                            style=" width:27%;height: 300px;overflow:auto;float: left;font-size: 14px;border-left: 1px solid #a1c3eb;">
+                            <div style="padding-top: 20px;padding-left: 10px;padding-bottom: 5px;font-weight: bold;">
+                                共检测{{reportData.info.detection_new[0].total_num}}项&nbsp&nbsp&nbsp&nbsp{{reportData.info.detection_new[0].problem_num}}项异常
+                            </div>
+                            <div
+                                style="width: 200px;height: 1px;background-color: gray;margin-left: 5px;margin-bottom: 5px;">
+                            </div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[0].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='1'">{{item.position}}:普通喷漆</div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[0].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='2'">{{item.position}}:可见伤</div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[0].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='3'">{{item.position}}:钣金修复</div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[0].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='4'">{{item.position}}:更换</div>
+                        </div>
+                    </div>
+                    <div style="width: 100%;height: 300px;border-bottom: 1px solid #a1c3eb;">
+                        <div
+                            style="width: 20%;height: 300px;float: left; text-align:center; line-height:300px;border-right: 1px solid #a1c3eb;">
+                            <p style="font-size: 16px;">骨架</p>
+                        </div>
+                        <div style="width: 45%;height: 300px;float: left;padding-left: 80px;">
+                            <!-- <img src="__PUBLIC__/images/admin/follow_car/wai_guan.png" alt="" style="width: 340px;" > -->
+                            <div class="gu_jia">
+                                <img src="__PUBLIC__/images/admin/follow_car/gu_jia.png" alt="" class="zhutu">
+                                <!-- <div v-for="item in items" :class="['back'+item.id, 'back'+item.id+'_'+item.color]"></div> -->
+                                <div v-for="item in gu_jia" :class="['back_guding_'+item.color_type]" :style="{
+                                    'left':(item.coordinate_x * 100+'%') ,
+                                    'top': (item.coordinate_y * 100+'%'),
+                                    'width': '10px',
+                                    'height': '10px',
+                                    'position': 'absolute'
+                                    }"></div>
+                                    <div style="display: flex;width: 300px;justify-content: space-between;line-height: 15px;height: 15px;">
+                                        <div style="width: 15px;height: 15px;border-radius: 50%;background-color: #b4c6e7;"></div>普通喷漆
+                                        <div style="width: 15px;height: 15px;border-radius: 50%;background-color: #f4b184;"></div>可见伤
+                                        <div style="width: 15px;height: 15px;border-radius: 50%;background-color: #f17866;"></div>钣金修复
+                                        <div style="width: 15px;height: 15px;border-radius: 50%;background-color: #f43308;"></div>更换
+                                    </div>
+                                <!-- <div style="
+                border-radius: 50%;
+                left: calc(0.2 * 100%);
+                top: calc(0.2 * 100%);
+                width: 7px;
+                height: 7px;
+                position: absolute;
+                background-color: red;
+                "></div> -->
+                            </div>
+                        </div>
+                        <div
+                            style="width:27%;height: 300px;overflow:auto;float: left;font-size: 14px;border-left: 1px solid #a1c3eb;">
+                            <div style="padding-top: 20px;padding-left: 10px;padding-bottom: 5px;font-weight: bold;">
+                                共检测{{reportData.info.detection_new[1].total_num}}项&nbsp&nbsp&nbsp&nbsp{{reportData.info.detection_new[1].problem_num}}项异常
+                            </div>
+                            <div
+                                style="width: 200px;height: 1px;background-color: gray;margin-left: 5px;margin-bottom: 5px;">
+                            </div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[1].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='1'">{{item.position}}:普通喷漆</div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[1].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='2'">{{item.position}}:可见伤</div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[1].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='3'">{{item.position}}:钣金修复</div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[1].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='4'">{{item.position}}:更换</div>
+                        </div>
+                    </div>
+                    <div style="width: 100%;height: 300px;">
+                        <div
+                            style="width: 20%;height: 300px;float: left; text-align:center; line-height:300px;border-right: 1px solid #a1c3eb;">
+                            <p style="font-size: 16px;">内饰</p>
+                        </div>
+                        <div style="width: 45%;height: 300px;float: left;padding-left: 80px;">
+                            <!-- <img src="__PUBLIC__/images/admin/follow_car/wai_guan.png" alt="" style="width: 340px;" > -->
+                            <div class="zhushitu">
+                                <img src="__PUBLIC__/images/admin/follow_car/nei_shi.png" alt="" class="zhutu">
+                                <div v-for="item in nei_shi" :class="['back_guding_'+item.color_type]" :style="{
+                                'border-radius': '50%',
+                                'left':(item.coordinate_x * 100+'%') ,
+                                'top': (item.coordinate_y * 100+'%'),
+                                'width': '10px',
+                                'height': '10px',
+                                'position': 'absolute'
+                                }"></div>
+                  
+                            </div>
+                            <div style="display: flex;width: 200px;justify-content: space-between;line-height: 15px;height: 15px;">
+                                <div style="width: 15px;height: 15px;border-radius: 50%;background-color: #ffc000;"></div>需修复
+                                <div style="width: 15px;height: 15px;border-radius: 50%;background-color: #f43308;"></div>事故损伤
+                            </div>
+                        </div>
+                        <div
+                            style="width:27%;height: 300px;overflow:auto;float: left;font-size: 14px;border-left: 1px solid #a1c3eb;">
+                            <div style="padding-top: 20px;padding-left: 10px;padding-bottom: 5px;font-weight: bold;">
+                                共检测{{reportData.info.detection_new[3].total_num}}项&nbsp&nbsp&nbsp&nbsp{{reportData.info.detection_new[3].problem_num}}项异常
+                            </div>
+                            <div
+                                style="width: 200px;height: 1px;background-color: gray;margin-left: 5px;margin-bottom: 5px;">
+                            </div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[3].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='1'">{{item.position}}:普通喷漆</div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[3].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='2'">{{item.position}}:可见伤</div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[3].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='3'">{{item.position}}:钣金修复</div>
+                            <div style='padding-bottom: 5px;padding-left: 30px;'
+                                v-for="item in reportData.info.detection_new[3].son"
+                                v-if="item.is_necessary=='1'&&item.color_type=='4'">{{item.position}}:更换</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 检测图片 -->
+                <div class="main-baseInfo" style="padding-left: 0px;">
+                    <p class="main-baseInfo__title">检测图片</p>
+                    <div class="main-baseInfo__detail jc-img">
+                    </div>
+                </div>
+                <!-- 免责声明 -->
+                <div class="main-baseInfo">
+                    <p class="main-baseInfo__title">免责声明</p>
+                    <div class="main-baseInfo__detail">
+                        <p>
+                            1、检测报告仅用于车况描述与展示、使用所产生的直接或间接损失及一切法律后果，本公司不承担任何经济和法律责任。
+                        </p>
+                        <p>
+                            2、以上为检测当天车况，实际车况以成交时交付查验为准。
+                        </p>
+                        <p>
+                            3、因检测条件有限，车辆检测为静态检测，动态及性能不在本次检测范围内，本检测报告仅供经销商参考使用。
+                        </p>
+                        <p>
+                            4、检测报告全部或部分复制、私自转让、盗用、冒用、涂改或以其他形式篡改，均属无效，且本公司将追求上述行为的法律责任。
+                        </p>
+                        <p>
+                            5、除非相关政府部门、法律或法院要求，否则未经本公司书面同意，本公司无须并无义务到法院对相关结果作证。若检测报告被不当使用，本公司将保留撤回检测结果的权利，并有权要求其他适当额外赔偿。
+                        </p>
+                    </div>
+                </div>
+            </main>
+            <footer>
+                <div class="footer-logo">
+                    <img class="buuotm" src="__PUBLIC__/images/home/logo-1.png" alt="">
+                </div>
+                <div class="footer-text">
+                    <div style="display: inline-block;">
+                        <p style="margin: 0px;">优&nbsp; 车&nbsp;库</p>
+                        <p style="margin: 0px;"> 服务专线</p>
+                    </div>
+                    <div class="footer-tel">
+                        400-639-2829
+                    </div>
+                </div>
+            </footer>
+            <div class="footer-bg"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+        var url;
+        var vinCode = getQueryString("vin");
+        // var vinCode = 'LSGJA52H9GS166036';
+        var exae = window.location.pathname;
+        var reportData;
+        if (exae.indexOf('Admin') > -1 || exae.indexOf('admin') > -1) {
+            url = '/Admin/CarDetection/external_test_report?vin=' + vinCode;
+        } else {
+            url = '/Share/Car/external_test_report?vin=' + vinCode;
+        }
+
+        function showCustomer(str) {
+            var xmlhttp;
+            if (str == "") {
+                return;
+            }
+            if (window.XMLHttpRequest) {
+                // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    reportData = JSON.parse(xmlhttp.responseText)
+                    if (reportData.status == 1) {
+                        // console.log(vm.bi)
+                        document.title = reportData.info.basic_information.plate_number + '检测报告';
+                        $('.main-title').html(reportData.info.basic_information.type_name);
+                        $('.main-testTime span').html(reportData.info.basic_information.detection_time);
+                        //基本信息
+                        $('.main-baseInfo-left img').attr('src', reportData.info.basic_information.pic_main);
+                        var baseInfo = ""
+                        baseInfo += '<p class="over_h">车型名称：' + reportData.info.basic_information.type_name + '</p>'
+                        baseInfo += '<div class="pull-left" style="width:50%">';
+                        baseInfo += '<p>车架号：' + reportData.info.basic_information.vin + '</p>'
+                        baseInfo += '<p>车牌号：' + reportData.info.basic_information.plate_number + '</p>'
+                        baseInfo += '<p>出厂日期：' + reportData.info.basic_information.production_date + '</p>'
+                        baseInfo += '<p>上牌时间：' + reportData.info.basic_information.license_reg_date + '</p>'
+                        baseInfo += '<p>行驶里程：' + reportData.info.basic_information.kilometre + '公里</p>'
+                        baseInfo += '</div>'
+                        baseInfo += ' <div class="pull-left" style="width:50%">';
+                        baseInfo += '<p>发动机号：' + reportData.info.vehicle_archives.engine_number + '</p>'
+                        baseInfo += '<p>官方颜色：' + reportData.info.basic_information.appearance_color_offical + '</p>'
+                        baseInfo += '<p>排放标准：' + reportData.info.basic_information.environmental_standards + '</p>'
+                        baseInfo += '<p>使用性质：' + reportData.info.basic_information.nature_of_usage + '</p>'
+                        baseInfo += '<p>车况状态：' + reportData.info.basic_information.condition_state + '</p>'
+                        baseInfo += '</div>'
+
+                        $('.main-baseInfo-mid').html(baseInfo);
+                        $('.main-baseInfo-right').html(reportData.info.basic_information.detection_level)
+                        // 车辆档案
+                        var da = "";
+                        da += '<div class="pull-left" style="width:33%">';
+                        da += '<p>车辆所在地：' + reportData.info.basic_information.location + '</p>';
+                        da += '<p>年检到期：' + reportData.info.vehicle_archives.inspection_valid_date + '</p>';
+                        da += '</div>';
+                        da += '<div class="pull-left" style="width:33%">';
+                        da += '<p>上牌城市：' + reportData.info.vehicle_archives.card_city + '</p>';
+                        da += '<p>钢印车架号：' + reportData.info.vehicle_archives.engine_number + '</p>';
+                        da += '</div>';
+                        da += '<div class="pull-left" style="width:33%">';
+                        da += '<p>交强到期：' + reportData.info.vehicle_archives.insurance_valid_date + '</p>';
+                        da += '<p>是否有行驶证：' + reportData.info.vehicle_archives.driving_license + '</p>';
+                        da += '</div>';
+                        $('.car-files').html(da);
+                        // 事故检测
+                        var sg = "";
+                        sg += '<p title="' + reportData.info.accident_detection.major_events + '">大事故项：' + reportData.info.accident_detection.major_events + '</p>';
+                        sg += '<p>重大大事故描述：' + reportData.info.accident_detection.accident_description + '</p>';
+                        $('.sg-detail').html(sg);
+                        //检测总结
+                        var jc = "";
+                        for (var k = 0; k < reportData.info.test_summary.length; k++) {
+                            jc += '<div class="jc-des">' + reportData.info.test_summary[k] + '</div>';
+                        }
+                        $('.jc-detail').html(jc);
+                        //检测信息
+                        var jcInfo = ""
+                        for (var i = 0; i < reportData.info.detection_information.length; i++) {
+                            // console.log(reportData.info.detection_information[i])
+                            jcInfo += '<li><div class="pull-left jc-info__left" ><div class="">';
+                            jcInfo += '<img src="' + reportData.info.detection_information[i].title_pic + '"alt="检测信息图片"></div></div>'
+                            jcInfo += ' <div class="pull-left jc-info__right"> <div class="">';
+                            jcInfo += '<div><div class="consxl pull-left">' + reportData.info.detection_information[i].title + '</div>';
+                            jcInfo += '<span class="itd_li_span">' + reportData.info.detection_information[i].english_name + '</span>';
+                            jcInfo += '<span class="itd_li_span itd_li_span_n1">缺陷项：' + reportData.info.detection_information[i].problem_count + '</span></div>';
+                            if (reportData.info.detection_information[i].desc.length >= 8) {
+                                for (var j = 0; j < reportData.info.detection_information[i].desc.length; j++) {
+                                    jcInfo += '<p class="desc_p inlineBlock">' + (j + 1) + ":" + reportData.info.detection_information[i].desc[j] + '</p>';
+                                }
+                            } else {
+                                for (var j = 0; j < reportData.info.detection_information[i].desc.length; j++) {
+                                    jcInfo += '<p class="desc_p">' + (j + 1) + ":" + reportData.info.detection_information[i].desc[j] + '</p>';
+                                }
+
+                            }
+                            jcInfo += '</div></div></li>';
+                        }
+                        $('.jc-info__content').html(jcInfo);
+                        //检测图片
+                        var jcImg = "";
+                        for (var f = 0; f < reportData.info.pic_detection.length; f++) {
+                            jcImg += '<div style="margin-bottom:20px"><div class="title-icon"><img src="' + reportData.info.pic_detection[f].title_pic + '">' + reportData.info.pic_detection[f].title + '</div><div class="clear">'
+                            for (var b = 0; b < reportData.info.pic_detection[f].pic.length; b++) {
+                                jcImg += '<div class="img-box pull-left">';
+                                jcImg += '<img src="' + reportData.info.pic_detection[f].pic[b].url + '">';
+                                jcImg += '<div class="img-text">' + reportData.info.pic_detection[f].pic[b].desc + '</div></div>';
+                            }
+                            jcImg += "</div></div>"
+                            // jcImg += '<div class="row"><div class="col-xs-12 col-sm-6 img-box">';
+                            // jcImg += '<img src="' +reportData.info.pic_detection +'">';
+                            // jcImg += '<div class="img-text">' + +'</div></div></div>';
+                        }
+                        $('.jc-img').html(jcImg)
+
+                        var vm = new Vue({
+                            el: "#app",
+                            data: {
+                                fullHeight: document.documentElement.clientHeight, //可滚动视图高度
+                                config: {
+                                    //添加请求头
+                                    headers: {
+                                        "Content-Type":
+                                            "application/x-www-form-urlencoded; charset=utf-8",
+                                        "X-Requested-With": "XMLHttpRequest",
+                                    },
+                                },
+                                gu_jia: '',
+                                nei_shi: '',
+                                wai_guan: "",
+                                items: [
+                                    { id: 1, color: 1 },
+                                    { id: 2, color: 2 },
+                                    { id: 3, color: 3 },
+                                ],
+                                // dadian: [
+                                //   { id: 0.5, color: 1 },
+                                //   { id: 0.7, color: 2 },
+                                //   { id: 0.9, color: 3 },
+                                // ]
+                            },
+                            methods: {
+
+                            },
+                            created() {
+                                // this.getlist()
+                                console.log(reportData)
+                                this.gu_jia = reportData.info.detection_new[1].son
+                                this.nei_shi = reportData.info.detection_new[3].son
+                                this.wai_guan = reportData.info.detection_new[0].son
+                                console.log(this.gu_jia)
+                            },
+                            mounted() {
+                                const that = this;
+                                window.onresize = () => {
+                                    return (() => {
+                                        window.fullHeight = document.documentElement.clientHeight;
+                                        that.fullHeight = window.fullHeight;
+                                    })();
+                                };
+                            },
+                        });
+
+                    } else {
+                        alert(reportData.info)
+                    }
+                }
+                console.log(reportData)
+            }
+            xmlhttp.open("GET", url, true);
+            xmlhttp.setRequestHeader('Accept', 'application/json');
+            xmlhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xmlhttp.setRequestHeader('Content-Type', 'application/json');
+            xmlhttp.send();
+
+            // return reportData
+        }
+        showCustomer()
+    </script>
+</body>
+
+</html>
