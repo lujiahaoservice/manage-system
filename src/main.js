@@ -1,4 +1,5 @@
 import Vue from 'vue'
+222222222222222
 import App from './App.vue'
 import router from './router'
 import store from './store'
